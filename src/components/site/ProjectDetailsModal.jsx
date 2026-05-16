@@ -1,4 +1,5 @@
-import { motion as Motion } from 'framer-motion';
+import { motion as Motion, useReducedMotion } from 'framer-motion';
+import { useEffect } from 'react';
 import Magnetic from './Magnetic';
 import ProjectThumbnail from './ProjectThumbnail';
 import { MOTION_EASE } from './motion';
@@ -17,34 +18,84 @@ const PROJECT_TONE_LABELS = {
   ledger: 'Structured read',
 };
 
-const detailPanelVariants = {
+const overlayVariants = {
   hidden: {
     opacity: 0,
-    y: 20,
+    backdropFilter: 'blur(0px)',
   },
   show: {
     opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.36,
-      ease: MOTION_EASE,
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: -14,
+    backdropFilter: 'blur(12px)',
     transition: {
       duration: 0.24,
       ease: MOTION_EASE,
     },
   },
+  exit: {
+    opacity: 0,
+    backdropFilter: 'blur(0px)',
+    transition: {
+      duration: 0.2,
+      ease: MOTION_EASE,
+    },
+  },
 };
 
-export default function ProjectDetailsPanel({
+const panelVariants = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+    scale: 0.985,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.3,
+      ease: MOTION_EASE,
+      when: 'beforeChildren',
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: 12,
+    scale: 0.985,
+    transition: {
+      duration: 0.2,
+      ease: MOTION_EASE,
+    },
+  },
+};
+
+const detailPanelVariants = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.32,
+      ease: MOTION_EASE,
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -12,
+    transition: {
+      duration: 0.18,
+      ease: MOTION_EASE,
+    },
+  },
+};
+
+function ProjectDetailsPanel({
   project,
   tone = 'vector',
   scrollable = false,
-  id = 'project-case-study',
+  titleId = 'project-case-study-title',
   className = '',
   style,
 }) {
@@ -54,14 +105,13 @@ export default function ProjectDetailsPanel({
 
   return (
     <Motion.article
-      id={id}
       variants={detailPanelVariants}
       initial="hidden"
       animate="show"
       exit="exit"
       data-project-tone={tone}
-      className={`project-detail-shell surface-panel-strong relative rounded-[1.55rem] p-4 sm:rounded-[2.2rem] sm:p-7 lg:p-8 ${
-        scrollable ? 'project-detail-scroll lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pr-4' : ''
+      className={`project-detail-shell surface-panel-strong relative rounded-[1.45rem] p-4 sm:rounded-[1.9rem] sm:p-6 lg:rounded-[2.2rem] lg:p-8 ${
+        scrollable ? 'project-detail-scroll min-h-0 overflow-y-auto pr-1 sm:pr-2' : ''
       } ${className}`}
       style={{ willChange: 'opacity, transform', ...style }}
     >
@@ -71,22 +121,27 @@ export default function ProjectDetailsPanel({
 
       <div className="project-tone-ribbon" aria-hidden="true">
         <span className="project-tone-ribbon__line" />
-        <span className="project-tone-ribbon__label">{PROJECT_TONE_LABELS[tone] ?? PROJECT_TONE_LABELS.vector}</span>
+        <span className="project-tone-ribbon__label">
+          {PROJECT_TONE_LABELS[tone] ?? PROJECT_TONE_LABELS.vector}
+        </span>
       </div>
 
-      <div className="relative z-10 space-y-8">
+      <div className="relative z-10 space-y-6 sm:space-y-8">
         <div className="grid gap-6 md:grid-cols-[minmax(0,1.02fr)_minmax(15.5rem,0.98fr)] md:items-start xl:grid-cols-[minmax(0,1.05fr)_minmax(18rem,0.95fr)]">
           <div className="min-w-0">
             <span className="eyebrow">Project {project.index}</span>
-            <h3 className="mt-4 max-w-[14ch] text-balance text-[1.85rem] font-bold leading-[0.94] tracking-[-0.065em] text-foreground sm:mt-5 sm:text-[2.6rem] xl:text-[3rem]">
+            <h3
+              id={titleId}
+              className="mt-4 max-w-[14ch] text-balance text-[1.85rem] font-bold leading-[0.94] tracking-[-0.065em] text-foreground sm:mt-5 sm:text-[2.45rem] xl:text-[3rem]"
+            >
               {project.name}
             </h3>
-            <p className="mt-4 max-w-[38rem] text-[0.96rem] leading-7 text-foreground sm:mt-5 sm:text-[1.04rem] sm:leading-8">
+            <p className="mt-4 max-w-[38rem] text-[0.95rem] leading-7 text-foreground sm:mt-5 sm:text-[1.02rem] sm:leading-8">
               {project.description}
             </p>
 
             {project.detail ? (
-              <p className="mt-4 max-w-[36rem] text-[0.94rem] leading-7 text-foreground-muted sm:mt-5 sm:text-[0.96rem]">
+              <p className="mt-4 max-w-[36rem] text-[0.92rem] leading-7 text-foreground-muted sm:mt-5 sm:text-[0.96rem]">
                 {project.detail}
               </p>
             ) : null}
@@ -104,11 +159,11 @@ export default function ProjectDetailsPanel({
             <ProjectThumbnail
               project={project}
               tone={tone}
-              className="aspect-[16/10] rounded-[1.6rem]"
+              className="aspect-[16/10] rounded-[1.45rem] sm:rounded-[1.6rem]"
             />
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="project-detail-panel rounded-[1.4rem] p-4">
+              <div className="project-detail-panel rounded-[1.3rem] p-4">
                 <span className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-foreground-muted">
                   Role
                 </span>
@@ -117,7 +172,7 @@ export default function ProjectDetailsPanel({
                 </p>
               </div>
 
-              <div className="project-detail-panel rounded-[1.4rem] p-4">
+              <div className="project-detail-panel rounded-[1.3rem] p-4">
                 <span className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-foreground-muted">
                   Availability
                 </span>
@@ -131,25 +186,25 @@ export default function ProjectDetailsPanel({
 
         <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="grid gap-4">
-            <div className="project-detail-panel rounded-[1.5rem] p-5">
+            <div className="project-detail-panel rounded-[1.35rem] p-5">
               <span className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-foreground-muted">
                 Summary
               </span>
-              <p className="mt-4 text-base leading-7 text-foreground">
+              <p className="mt-4 text-[0.98rem] leading-7 text-foreground sm:text-base">
                 {project.summary ?? project.outcome ?? project.description}
               </p>
             </div>
 
-            <div className="project-detail-panel rounded-[1.5rem] p-5">
+            <div className="project-detail-panel rounded-[1.35rem] p-5">
               <span className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-foreground-muted">
                 Outcome
               </span>
-              <p className="mt-4 text-base leading-7 text-foreground">
+              <p className="mt-4 text-[0.98rem] leading-7 text-foreground sm:text-base">
                 {project.outcome ?? project.caseStudy?.impact ?? project.detail}
               </p>
             </div>
 
-            <div className="project-detail-panel rounded-[1.5rem] p-5">
+            <div className="project-detail-panel rounded-[1.35rem] p-5">
               <span className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-foreground-muted">
                 Tech Stack
               </span>
@@ -168,11 +223,11 @@ export default function ProjectDetailsPanel({
 
           <div className="grid gap-4">
             {CASE_STUDY_SECTIONS.map((section) => (
-              <div key={section.key} className="project-detail-panel rounded-[1.5rem] p-5 sm:p-6">
+              <div key={section.key} className="project-detail-panel rounded-[1.35rem] p-5 sm:p-6">
                 <span className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-foreground-muted">
                   {section.label}
                 </span>
-                <p className="mt-4 text-base leading-7 text-foreground">
+                <p className="mt-4 text-[0.98rem] leading-7 text-foreground sm:text-base">
                   {project.caseStudy?.[section.key] ?? project.caseStudy?.approach}
                 </p>
               </div>
@@ -216,5 +271,73 @@ export default function ProjectDetailsPanel({
         </div>
       </div>
     </Motion.article>
+  );
+}
+
+export default function ProjectDetailsModal({ project, onClose, tone = 'vector' }) {
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    const previousTouchAction = document.body.style.touchAction;
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose?.();
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.style.touchAction = previousTouchAction;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
+  if (!project) {
+    return null;
+  }
+
+  return (
+    <Motion.div
+      variants={overlayVariants}
+      initial="hidden"
+      animate="show"
+      exit="exit"
+      className="fixed inset-0 z-[90] flex items-end justify-center bg-background/58 px-2 py-2 sm:items-center sm:px-4 sm:py-4 lg:px-5 lg:py-5"
+      onClick={() => onClose?.()}
+    >
+      <Motion.div
+        variants={panelVariants}
+        transition={reduceMotion ? { duration: 0 } : undefined}
+        onClick={(event) => event.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="project-case-study-title"
+        className="relative flex h-[min(92dvh,58rem)] w-full max-w-6xl flex-col overflow-hidden rounded-[1.6rem] border border-border/80 bg-background/78 p-2 shadow-[var(--theme-shadow-lg)] backdrop-blur-xl sm:rounded-[2rem] sm:p-3 lg:p-4"
+      >
+        <button
+          type="button"
+          onClick={() => onClose?.()}
+          aria-label="Close project details"
+          className="project-modal-close absolute right-3 top-3 z-20 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/84 text-base text-foreground sm:h-11 sm:w-11"
+        >
+          &times;
+        </button>
+
+        <div className="min-h-0 flex-1">
+          <ProjectDetailsPanel
+            project={project}
+            tone={tone}
+            scrollable
+            titleId="project-case-study-title"
+            className="h-full"
+          />
+        </div>
+      </Motion.div>
+    </Motion.div>
   );
 }

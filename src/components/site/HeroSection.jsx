@@ -12,6 +12,7 @@ const heroPreviewContainer = createStaggerContainer(0.08, 0.22);
 const heroPreviewItem = createStaggerItem(24, 0.6);
 const SCRAMBLE_CHARS = ['0', '1', '@', '#', '$', '%', '*'];
 const HERO_PIN_TOP_OFFSET = 112;
+const HERO_EFFECTS_QUERY = '(min-width: 1100px) and (min-height: 760px)';
 
 function createSeedLine(target, seed) {
   return Array.from({ length: target.length }, (_, index) => seed[index % seed.length]).join('');
@@ -75,7 +76,7 @@ function HeroSection({ profile, hero, keyHighlights, onOpenResume, enableEnhance
       return undefined;
     }
 
-    const effectsQuery = window.matchMedia('(min-width: 768px)');
+    const effectsQuery = window.matchMedia(HERO_EFFECTS_QUERY);
     const updateEnabled = () => {
       setEnableScrollEffects(effectsQuery.matches && !reduceMotion && enableEnhancedEffects);
     };
@@ -251,7 +252,7 @@ function HeroSection({ profile, hero, keyHighlights, onOpenResume, enableEnhance
                 </Motion.p>
 
                 <Motion.div variants={heroSupportItem} className="mt-8">
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-5">
+                <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between xl:gap-5">
                     <div className="surface-panel flex w-full max-w-[34rem] flex-wrap items-center gap-2.5 rounded-[1.2rem] px-4 py-3 sm:gap-3 sm:rounded-[1.35rem] sm:px-5 sm:py-3.5">
                       <span className="eyebrow !mb-0">
                         Why me
@@ -261,8 +262,8 @@ function HeroSection({ profile, hero, keyHighlights, onOpenResume, enableEnhance
                       </p>
                     </div>
 
-                    <div className="flex w-full flex-col gap-3.5 lg:w-auto lg:items-end">
-                      <div className="flex flex-col gap-3 min-[500px]:flex-row min-[500px]:flex-wrap lg:justify-end">
+                    <div className="flex w-full flex-col gap-3.5 xl:w-auto xl:items-end">
+                      <div className="flex flex-col gap-3 min-[500px]:flex-row min-[500px]:flex-wrap xl:justify-end">
                         <Magnetic proximity proximityRadius={132} proximityStrength={13}>
                           <a
                             href={`mailto:${profile.email}`}
@@ -300,7 +301,7 @@ function HeroSection({ profile, hero, keyHighlights, onOpenResume, enableEnhance
                       </div>
 
                       {visibleBadges.length ? (
-                        <div className="flex flex-wrap gap-2.5 sm:gap-3 lg:justify-end">
+                        <div className="flex flex-wrap gap-2.5 sm:gap-3 xl:justify-end">
                           {visibleBadges.map((badge) => (
                             <span key={badge} className="hero-chip hero-chip--muted">
                               {badge}
@@ -309,7 +310,7 @@ function HeroSection({ profile, hero, keyHighlights, onOpenResume, enableEnhance
                         </div>
                       ) : null}
 
-                      <p className="max-w-[24rem] text-xs font-medium uppercase tracking-[0.2em] text-foreground-muted lg:text-right">
+                      <p className="max-w-[24rem] text-xs font-medium uppercase tracking-[0.2em] text-foreground-muted xl:text-right">
                         Clear value prop, real projects, and a portfolio built to feel intentional from the first scroll.
                       </p>
                     </div>
@@ -323,7 +324,7 @@ function HeroSection({ profile, hero, keyHighlights, onOpenResume, enableEnhance
             initial="hidden"
             animate="show"
             variants={heroPreviewContainer}
-            className="w-full max-lg:mx-auto max-lg:max-w-[40rem] lg:-mt-2 lg:justify-self-end"
+            className="w-full max-xl:mx-auto max-xl:max-w-[40rem] xl:-mt-2 xl:justify-self-end"
           >
             <Motion.div style={enableScrollEffects ? { y: previewY, scale: previewScale } : { y: 0, scale: 1 }}>
               <div

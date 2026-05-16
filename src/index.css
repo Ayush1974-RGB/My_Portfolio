@@ -1433,6 +1433,7 @@ html[data-theme='dark'] {
   .project-detail-scroll {
     overscroll-behavior: contain;
     scrollbar-gutter: stable;
+    -webkit-overflow-scrolling: touch;
   }
 
   .project-modal-watermark {
@@ -1663,6 +1664,7 @@ html[data-theme='dark'] {
     display: inline-flex;
     width: fit-content;
     will-change: transform;
+    max-width: 100%;
   }
 
   .magnetic-shell--fluid {
@@ -1699,6 +1701,24 @@ html[data-theme='dark'] body {
     radial-gradient(circle at 84% 16%, color-mix(in srgb, #ffffff 4%, transparent), transparent 18%),
     radial-gradient(circle at bottom, rgba(9, 18, 38, 0.48), transparent 42%),
     linear-gradient(180deg, var(--theme-background) 0%, color-mix(in srgb, var(--theme-background) 92%, #071224 8%) 100%);
+}
+
+.project-gallery-shell {
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.project-gallery-shell::-webkit-scrollbar {
+  display: none;
+}
+
+.project-gallery-card {
+  scroll-snap-align: start;
+}
+
+.project-gallery-rail {
+  min-height: 2.75rem;
 }
 
 html[data-theme='dark'] .surface-panel {
@@ -2390,7 +2410,8 @@ html[data-theme='dark'] .project-action--secondary:focus-visible {
     width: 100%;
     flex-basis: auto;
     align-self: auto;
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: center;
     padding-top: 0;
   }
 
@@ -2418,6 +2439,10 @@ html[data-theme='dark'] .project-action--secondary:focus-visible {
 }
 
 @media (max-width: 768px) {
+  :where(main[id], section[id]) {
+    scroll-margin-top: 5rem;
+  }
+
   .contact-shell {
     padding: 1.7rem;
   }
@@ -2464,6 +2489,53 @@ html[data-theme='dark'] .project-action--secondary:focus-visible {
 
   .contact-card-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .button-primary,
+  .button-secondary,
+  .project-action {
+    width: 100%;
+    padding-inline: 1rem;
+  }
+
+  .project-modal-trace {
+    align-items: flex-start;
+  }
+
+  .project-modal-caption {
+    line-height: 1.5;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .ambient-orb {
+    opacity: 0.12;
+    filter: blur(82px);
+  }
+
+  .button-primary:hover,
+  .button-secondary:hover,
+  .project-action--primary:hover,
+  .project-action--secondary:hover,
+  .interactive-outline:hover,
+  .interactive-outline:hover::after,
+  .project-card-shell.interactive-outline:hover,
+  .project-card-shell.interactive-outline:hover::after,
+  .contact-link-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .contact-link-card:hover {
+    border-color: var(--theme-border);
+    background:
+      linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--theme-surface) 96%, transparent),
+        color-mix(in srgb, var(--theme-background) 68%, transparent)
+      );
   }
 }
 
