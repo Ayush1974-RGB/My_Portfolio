@@ -14,6 +14,7 @@ import SkillsSection from './components/site/SkillsSection';
 import SecurityMindsetSection from './components/site/SecurityMindsetSection';
 import CurrentlyLearningSection from './components/site/CurrentlyLearningSection';
 import SiteFooter from './components/site/SiteFooter';
+import SkeletonLoader from './components/site/SkeletonLoader';
 
 const loadScrollProgress = () => import('./components/site/ScrollProgress');
 const loadCustomCursor = () => import('./components/site/CustomCursor');
@@ -33,8 +34,14 @@ const ResumeModal = lazy(loadResumeModal);
 
 const LazySectionFallback = memo(function LazySectionFallback({ id, className = 'section-space' }) {
   return (
-    <section id={id} className={className} aria-hidden="true">
-      <div className="section-shell" />
+    <section id={id} className={`${className} relative overflow-hidden`} aria-hidden="true">
+      <div className="section-shell">
+        <div className="grid gap-5 md:grid-cols-2 lg:gap-6">
+          <SkeletonLoader type="card" className="md:col-span-2" />
+          <SkeletonLoader type="card" />
+          <SkeletonLoader type="card" />
+        </div>
+      </div>
     </section>
   );
 });

@@ -3,6 +3,7 @@ import { motion as Motion } from 'framer-motion';
 import SectionHeading from './SectionHeading';
 import Reveal from './Reveal';
 import TextScrubBlock from './TextScrubBlock';
+import { staggerList, listItem } from '../../animations/variants';
 
 function AboutSection({ about }) {
   return (
@@ -91,10 +92,17 @@ function AboutSection({ about }) {
                 </Motion.div>
               </div>
 
-              <div className="about-strengths-grid mt-12 grid gap-4 md:grid-cols-2 lg:mt-16 lg:gap-5 xl:grid-cols-3">
+              <Motion.div
+                variants={staggerList({ staggerChildren: 0.08, delayChildren: 0.1 })}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.35 }}
+                className="about-strengths-grid mt-12 grid gap-4 md:grid-cols-2 lg:mt-16 lg:gap-5 xl:grid-cols-3"
+              >
                 {about.strengths.map((strength, index) => (
                   <Motion.article
                     key={strength.title}
+                    variants={listItem()}
                     whileHover={{ y: -4, scale: 1.006 }}
                     className={`about-strength-card rounded-[1.45rem] border p-5 sm:rounded-[1.6rem] sm:p-6 ${
                       index === 1
@@ -117,7 +125,7 @@ function AboutSection({ about }) {
                     </p>
                   </Motion.article>
                 ))}
-              </div>
+              </Motion.div>
             </div>
           </Reveal>
         </div>

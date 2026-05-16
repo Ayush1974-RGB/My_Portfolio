@@ -2,6 +2,7 @@ import { memo, useMemo } from 'react';
 import { motion as Motion, useReducedMotion } from 'framer-motion';
 import SectionHeading from './SectionHeading';
 import StickySplitSection from './StickySplitSection';
+import { staggerList, listItem } from '../../animations/variants';
 
 const ROLE_TONES = [
   {
@@ -95,18 +96,22 @@ function ClubsSection({ clubs }) {
             </div>
           }
           rightContent={
-            <div className="grid gap-4 md:grid-cols-2 lg:gap-5">
+            <Motion.div
+              variants={staggerList({ staggerChildren: 0.08, delayChildren: 0.04 })}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+              className="grid gap-4 md:grid-cols-2 lg:gap-5"
+            >
               {clubs.roles.map((role, index) => {
                 const tone = ROLE_TONES[index % ROLE_TONES.length];
 
                 return (
                   <Motion.article
                     key={`${role.title}-${role.org}`}
-                    initial={prefersReducedMotion ? false : { opacity: 0, y: 22, rotate: index % 2 === 0 ? -1.2 : 1.2 }}
-                    whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0, rotate: 0 }}
-                    viewport={{ once: true, amount: 0.22 }}
-                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: index * 0.04 }}
-                    className="group relative overflow-hidden rounded-[1.9rem] border border-border bg-background/88 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.06)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_28px_80px_rgba(15,23,42,0.1)] sm:p-6"
+                    variants={listItem()}
+                    whileHover={{ y: -4, scale: 1.008 }}
+                    className="group relative overflow-hidden rounded-[1.9rem] border border-border bg-background/88 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.06)] transition-transform duration-300 hover:shadow-[0_28px_80px_rgba(15,23,42,0.1)] sm:p-6"
                   >
                     <div
                       aria-hidden="true"
@@ -160,7 +165,7 @@ function ClubsSection({ clubs }) {
                   </Motion.article>
                 );
               })}
-            </div>
+            </Motion.div>
           }
         />
       </div>

@@ -265,38 +265,47 @@ function HeroSection({ profile, hero, keyHighlights, onOpenResume, enableEnhance
                     <div className="flex w-full flex-col gap-3.5 xl:w-auto xl:items-end">
                       <div className="flex flex-col gap-3 min-[500px]:flex-row min-[500px]:flex-wrap xl:justify-end">
                         <Magnetic proximity proximityRadius={132} proximityStrength={13}>
-                          <a
+                          <Motion.a
                             href={`mailto:${profile.email}`}
+                            whileHover={{ scale: 1.008, y: -1 }}
+                            whileTap={{ scale: 0.96 }}
+                            transition={{ duration: 0.18 }}
                             className="button-primary hero-primary-cta w-full min-[500px]:w-auto"
                             data-cursor-wrap="true"
                             data-cursor-padding="10"
                             data-cursor-proximity="122"
                           >
                             Email Me <span aria-hidden="true">/</span>
-                          </a>
+                          </Motion.a>
                         </Magnetic>
                         <Magnetic strength={8} proximity proximityRadius={128} proximityStrength={12}>
-                          <button
+                          <Motion.button
                             type="button"
                             onClick={onOpenResume}
+                            whileHover={{ scale: 1.006, y: -1 }}
+                            whileTap={{ scale: 0.96 }}
+                            transition={{ duration: 0.18 }}
                             className="button-secondary w-full min-[500px]:w-auto"
                             data-cursor-wrap="true"
                             data-cursor-padding="10"
                             data-cursor-proximity="118"
                           >
                             View Resume <span aria-hidden="true">/</span>
-                          </button>
+                          </Motion.button>
                         </Magnetic>
                         <Magnetic strength={7} proximity proximityRadius={128} proximityStrength={11}>
-                          <a
+                          <Motion.a
                             href="#projects"
+                            whileHover={{ scale: 1.006, y: -1 }}
+                            whileTap={{ scale: 0.96 }}
+                            transition={{ duration: 0.18 }}
                             className="button-secondary w-full min-[500px]:w-auto"
                             data-cursor-wrap="true"
                             data-cursor-padding="10"
                             data-cursor-proximity="118"
                           >
                             View Work <span aria-hidden="true">/</span>
-                          </a>
+                          </Motion.a>
                         </Magnetic>
                       </div>
 

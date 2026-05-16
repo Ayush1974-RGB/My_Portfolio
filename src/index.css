@@ -2171,6 +2171,7 @@ html[data-theme='dark'] .project-action--secondary:focus-visible {
   --scene-tilt-y: 0deg;
   --scene-shift-x: 0px;
   --scene-shift-y: 0px;
+  --scene-scale: 1;
 }
 
 .contact-orbital-stage {
@@ -2184,7 +2185,8 @@ html[data-theme='dark'] .project-action--secondary:focus-visible {
     perspective(1200px)
     rotateX(var(--scene-tilt-x))
     rotateY(var(--scene-tilt-y))
-    translate3d(var(--scene-shift-x), var(--scene-shift-y), 0);
+    translate3d(var(--scene-shift-x), var(--scene-shift-y), 0)
+    scale(var(--scene-scale));
   transform-style: preserve-3d;
 }
 
@@ -2452,8 +2454,10 @@ html[data-theme='dark'] .project-action--secondary:focus-visible {
   }
 
   .contact-scene-wrap {
+    width: min(100%, 360px);
     height: 320px;
     min-height: 320px;
+    margin-inline: auto;
   }
 
   .contact-orbital-core {
@@ -2474,13 +2478,30 @@ html[data-theme='dark'] .project-action--secondary:focus-visible {
   }
 
   .contact-scene-wrap {
-    height: 280px;
-    min-height: 280px;
+    width: min(100%, 320px);
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1 / 1;
     border-radius: 1.5rem;
   }
 
+  .contact-scene-canvas--dom {
+    --scene-scale: 0.82;
+  }
+
+  .contact-orbital-core {
+    width: 10.75rem;
+    height: 10.75rem;
+  }
+
   .contact-orbit-shell {
-    --orbit-radius: calc(var(--orbit-radius) * 0.78);
+    --orbit-radius: calc(var(--orbit-radius) * 0.72);
+  }
+
+  .contact-tech-node__body {
+    width: 2.15rem;
+    height: 2.15rem;
+    font-size: 0.92rem;
   }
 
   .contact-tech-node__label {
@@ -2489,6 +2510,35 @@ html[data-theme='dark'] .project-action--secondary:focus-visible {
 
   .contact-card-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .contact-scene-wrap {
+    width: min(100%, 290px);
+  }
+
+  .contact-scene-canvas--dom {
+    --scene-scale: 0.74;
+  }
+
+  .contact-orbital-core {
+    width: 10rem;
+    height: 10rem;
+  }
+
+  .contact-tech-node__body {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.86rem;
+  }
+
+  .contact-scene-status {
+    left: 0.75rem;
+    bottom: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
   }
 }
 
