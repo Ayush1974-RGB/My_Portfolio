@@ -3,12 +3,30 @@ import Reveal from './Reveal';
 import ScrollScene from './ScrollScene';
 import TextReveal from './TextReveal';
 
+const STATEMENT_LAYERS = [
+  {
+    step: '01',
+    title: 'Interface clarity',
+    detail: 'Readable, fast, and intentional product surfaces.',
+  },
+  {
+    step: '02',
+    title: 'System flow',
+    detail: 'APIs, state, and edge cases aligned underneath.',
+  },
+  {
+    step: '03',
+    title: 'Secure defaults',
+    detail: 'Identity, trust, and safer engineering decisions built in.',
+  },
+];
+
 function StatementSection({ statement }) {
   return (
-    <section id="statement" className="section-shell section-space pt-10">
+    <section id="statement" className="section-shell section-space pt-8 sm:pt-10 lg:pt-12">
       <ScrollScene intensity="medium">
-        <Reveal className="statement-panel overflow-hidden rounded-[2.75rem] px-7 py-20 text-slate-50 sm:px-12 lg:px-16 lg:py-24">
-          <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[1.12fr_0.88fr]">
+        <Reveal className="statement-panel overflow-hidden rounded-[2.4rem] px-6 py-16 text-slate-50 sm:px-10 sm:py-18 lg:px-14 lg:py-20">
+          <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-12">
             <div className="text-center lg:text-left">
               <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-300">
                 {statement.label}
@@ -18,14 +36,14 @@ function StatementSection({ statement }) {
                 text={statement.headline}
                 split="words"
                 stagger={0.045}
-                className="mt-8 max-w-[15ch] text-[clamp(3rem,7vw,5.3rem)] font-bold leading-[0.91] tracking-[-0.065em] lg:max-w-[13ch]"
+                className="mt-7 max-w-[15ch] text-[clamp(2.65rem,6.3vw,4.85rem)] font-bold leading-[0.92] tracking-[-0.062em] lg:max-w-[13ch]"
               />
-              <p className="mt-7 max-w-[31rem] text-[1rem] leading-[1.82] text-slate-300 sm:text-[1.05rem]">{statement.supporting}</p>
-              <p className="mt-9 max-w-[24rem] font-editorial text-[1.8rem] italic leading-[1.08] text-slate-200 sm:text-[2.2rem]">
+              <p className="mt-6 max-w-[30rem] text-[0.98rem] leading-[1.78] text-slate-300 sm:text-[1.03rem]">{statement.supporting}</p>
+              <p className="mt-8 max-w-[23rem] font-editorial text-[1.55rem] italic leading-[1.08] text-slate-200 sm:text-[1.95rem]">
                 Product polish, network awareness, and security-minded execution.
               </p>
 
-              <div className="mt-10 flex flex-wrap justify-center gap-2.5 lg:justify-start">
+              <div className="mt-8 flex flex-wrap justify-center gap-2.5 lg:justify-start">
                 {['Identity', 'Network behavior', 'Trust by design'].map((item) => (
                   <span
                     key={item}
@@ -38,16 +56,42 @@ function StatementSection({ statement }) {
             </div>
 
             <div className="flex justify-center lg:justify-end">
-              <div className="relative flex h-[14.5rem] w-[14.5rem] items-center justify-center rounded-full border border-white/10 bg-white/4 backdrop-blur-sm">
-                <span className="absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-slate-500/70" />
-                <span className="absolute inset-y-6 left-1/2 w-px -translate-x-1/2 bg-slate-500/70" />
-                <span className="absolute h-[9.5rem] w-[9.5rem] rounded-full border border-white/12" />
-                <span className="absolute h-[6.5rem] w-[10.5rem] rotate-[28deg] rounded-full border border-accent/90" />
-                <span className="absolute h-[6.5rem] w-[10.5rem] -rotate-[28deg] rounded-full border border-slate-200/85" />
-                <span className="absolute h-5 w-5 rounded-full bg-accent shadow-[0_0_45px_var(--theme-accent)]" />
-                <span className="absolute text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-slate-300">
-                  Signal
-                </span>
+              <div className="statement-architecture">
+                <span className="statement-architecture__glow" aria-hidden="true" />
+                <span className="statement-architecture__ring statement-architecture__ring--outer" aria-hidden="true" />
+                <span className="statement-architecture__ring statement-architecture__ring--inner" aria-hidden="true" />
+                <span className="statement-architecture__grid" aria-hidden="true" />
+                <span className="statement-architecture__beam" aria-hidden="true" />
+
+                <div className="statement-architecture__header">
+                  <span className="statement-architecture__signal-dot" aria-hidden="true" />
+                  <span className="statement-architecture__label">Trust Architecture</span>
+                </div>
+
+                <div className="statement-architecture__layers">
+                  {STATEMENT_LAYERS.map((layer, index) => (
+                    <div
+                      key={layer.title}
+                      className={`statement-architecture__item ${
+                        index % 2 === 1 ? 'statement-architecture__item--offset' : ''
+                      }`}
+                    >
+                      <span className="statement-architecture__node" aria-hidden="true" />
+                      <div className="statement-architecture__card">
+                        <span className="statement-architecture__step">{layer.step}</span>
+                        <p className="statement-architecture__title">{layer.title}</p>
+                        <p className="statement-architecture__detail">{layer.detail}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="statement-architecture__footer">
+                  <span className="statement-architecture__footer-kicker">Outcome</span>
+                  <p className="statement-architecture__footer-copy">
+                    Product polish on the surface, stronger trust underneath.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

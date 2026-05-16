@@ -5,14 +5,31 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+        rel="preload"
+        as="style"
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,500;1,6..96,600&family=Onest:wght@400;500;600;700;800&family=Syne:wght@500;600;700;800&display=swap" />
+    <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" />
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,500;1,6..96,600&family=Onest:wght@400;500;600;700;800&family=Syne:wght@500;600;700;800&display=swap"
+        media="print"
+        onload="this.media='all'" />
+    <noscript>
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,500;1,6..96,600&family=Onest:wght@400;500;600;700;800&family=Syne:wght@500;600;700;800&display=swap" />
+    </noscript>
     <link rel="preload" as="image" href="/Profile.avif" type="image/avif" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="canonical" href="%VITE_SITE_URL%" />
+    <meta name="application-name" content="Aryan Bokolia Portfolio" />
+    <meta name="apple-mobile-web-app-title" content="Aryan Bokolia" />
+    <meta name="format-detection" content="telephone=no" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F8FAFC" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617" />
     <meta
@@ -22,8 +39,10 @@
         name="keywords"
         content="Aryan Bokolia, cybersecurity-focused developer, full-stack developer, frontend developer, React portfolio, secure systems, software engineering internship" />
     <meta name="author" content="Aryan Bokolia" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_IN" />
     <meta property="og:site_name" content="Aryan Bokolia Portfolio" />
     <meta property="og:url" content="%VITE_SITE_URL%" />
     <meta property="og:title" content="Aryan Bokolia | Cybersecurity-Focused Full-Stack Developer" />
@@ -31,6 +50,9 @@
         property="og:description"
         content="Portfolio of Aryan Bokolia, a cybersecurity-focused full-stack developer building secure web products, scalable systems, and polished digital experiences." />
     <meta property="og:image" content="%VITE_SITE_URL%/Profile.webp" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="900" />
     <meta property="og:image:alt" content="Portrait of Aryan Bokolia" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Aryan Bokolia | Cybersecurity-Focused Full-Stack Developer" />
@@ -43,6 +65,35 @@
         {
             "@context": "https://schema.org",
             "@graph": [
+                {
+                    "@type": "WebSite",
+                    "@id": "%VITE_SITE_URL%#website",
+                    "url": "%VITE_SITE_URL%",
+                    "name": "Aryan Bokolia Portfolio",
+                    "description": "Portfolio of Aryan Bokolia, a cybersecurity-focused full-stack developer building secure web products, scalable systems, and polished digital experiences.",
+                    "inLanguage": "en-IN",
+                    "publisher": {
+                        "@id": "%VITE_SITE_URL%#person"
+                    }
+                },
+                {
+                    "@type": "WebPage",
+                    "@id": "%VITE_SITE_URL%#webpage",
+                    "url": "%VITE_SITE_URL%",
+                    "name": "Aryan Bokolia | Cybersecurity-Focused Full-Stack Developer",
+                    "isPartOf": {
+                        "@id": "%VITE_SITE_URL%#website"
+                    },
+                    "about": {
+                        "@id": "%VITE_SITE_URL%#person"
+                    },
+                    "primaryImageOfPage": {
+                        "@type": "ImageObject",
+                        "url": "%VITE_SITE_URL%/Profile.webp"
+                    },
+                    "description": "Portfolio of Aryan Bokolia, a cybersecurity-focused full-stack developer building secure web products, scalable systems, and polished digital experiences.",
+                    "inLanguage": "en-IN"
+                },
                 {
                     "@type": "Person",
                     "@id": "%VITE_SITE_URL%#person",

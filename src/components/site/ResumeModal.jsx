@@ -279,7 +279,7 @@ export default function ResumeModal({
         </button>
 
         <Motion.div variants={contentVariants} initial="hidden" animate="show" exit="exit" className="flex h-full min-h-0 flex-col">
-          <Motion.div variants={itemVariants} className="border-b border-border/80 pb-4 pr-10 sm:pb-5 sm:pr-12 md:pr-14">
+          <Motion.div variants={itemVariants} className="border-b border-border/80 pb-5 pr-10 sm:pb-6 sm:pr-12 md:pb-7 md:pr-14">
             <div className="grid gap-4 xl:grid-cols-[1.16fr_0.84fr] xl:items-start">
               <div className="min-w-0">
                 <div className="flex items-center gap-3">
@@ -352,14 +352,14 @@ export default function ResumeModal({
               </div>
             </div>
 
-            <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex flex-wrap gap-2">
+            <div className="mt-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div className="flex max-w-[46rem] flex-wrap items-center gap-x-2.5 gap-y-3 pb-1 lg:pb-0">
                 <SkillTag>{profile.location}</SkillTag>
                 <SkillTag>{educationItem?.org ?? 'NITK'}</SkillTag>
                 <SkillTag accent>Security-Aware Development</SkillTag>
               </div>
 
-              <div className="flex flex-col gap-2.5 min-[480px]:flex-row">
+              <div className="flex flex-col gap-2.5 min-[480px]:flex-row lg:self-end">
                 <a href={`mailto:${profile.email}`} className="button-primary w-full min-[480px]:w-auto">
                   Contact Me <span aria-hidden="true">/</span>
                 </a>

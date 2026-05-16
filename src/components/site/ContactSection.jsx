@@ -52,6 +52,7 @@ function ContactSection({ contact, onOpenResume, enableOrbitalScene = true }) {
     contact.links.find((link) => link.label === 'GitHub'),
     resumeLink,
   ].filter(Boolean);
+  const sceneStatus = sceneInView ? 'Signal locked' : 'Channel primed';
 
   return (
     <section id="contact" className="section-space pb-24 sm:pb-28">
@@ -104,9 +105,29 @@ function ContactSection({ contact, onOpenResume, enableOrbitalScene = true }) {
               </Reveal.Item>
 
               <Reveal.Item>
-                <div className="mt-8 flex flex-wrap gap-3.5 sm:gap-4">
+                <div className="contact-availability-grid mt-7 grid gap-3 sm:grid-cols-3">
+                  {contact.availabilityItems.map((item) => (
+                    <div
+                      key={item.label}
+                      className="rounded-[1.2rem] border border-border bg-background/72 px-4 py-4"
+                    >
+                      <p className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-foreground-muted">
+                        {item.label}
+                      </p>
+                      <p className="mt-3 text-sm font-medium leading-6 text-foreground">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </Reveal.Item>
+
+              <Reveal.Item>
+                <div className="mt-8 flex flex-col gap-3 min-[460px]:flex-row min-[460px]:flex-wrap sm:gap-4">
                   <Magnetic>
-                    <a href={emailLink?.href} className="button-primary" aria-label={contact.primaryActionLabel}>
+                    <a
+                      href={emailLink?.href}
+                      className="button-primary w-full min-[460px]:w-auto"
+                      aria-label={contact.primaryActionLabel}
+                    >
                       {contact.primaryActionLabel} <span aria-hidden="true">/</span>
                     </a>
                   </Magnetic>
@@ -114,7 +135,7 @@ function ContactSection({ contact, onOpenResume, enableOrbitalScene = true }) {
                     <button
                       type="button"
                       onClick={onOpenResume}
-                      className="button-secondary"
+                      className="button-secondary w-full min-[460px]:w-auto"
                       aria-label={contact.secondaryActionLabel}
                     >
                       {contact.secondaryActionLabel} <span aria-hidden="true">/</span>
@@ -159,10 +180,51 @@ function ContactSection({ contact, onOpenResume, enableOrbitalScene = true }) {
                   {contact.highlight}
                 </p>
               </Reveal.Item>
+
+              <Reveal.Item>
+                <div className="contact-link-grid mt-7 grid gap-3 sm:grid-cols-2">
+                  {prioritizedLinks.map((link) =>
+                    link.label === 'Resume' ? (
+                      <button
+                        key={link.label}
+                        type="button"
+                        onClick={onOpenResume}
+                        className="contact-link-card text-left"
+                        aria-label={`Open ${link.label}`}
+                      >
+                        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-foreground-muted">
+                          {link.label}
+                        </span>
+                        <p className="mt-3 text-base font-semibold text-foreground">{link.value}</p>
+                        <p className="mt-2 text-sm leading-6 text-foreground-muted">{link.description}</p>
+                      </button>
+                    ) : (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        target={link.href.startsWith('http') ? '_blank' : undefined}
+                        rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
+                        className="contact-link-card"
+                        aria-label={`Open ${link.label}`}
+                      >
+                        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-foreground-muted">
+                          {link.label}
+                        </span>
+                        <p className="mt-3 text-base font-semibold text-foreground">{link.value}</p>
+                        <p className="mt-2 text-sm leading-6 text-foreground-muted">{link.description}</p>
+                      </a>
+                    )
+                  )}
+                </div>
+              </Reveal.Item>
             </Reveal>
 
             <Reveal delay={0.1} className="contact-visual-column">
               <div ref={sceneRef} className="contact-scene-wrap">
+                <div className="contact-scene-status">
+                  <span className="contact-scene-status__dot" aria-hidden="true" />
+                  <span>{sceneStatus}</span>
+                </div>
                 {enableOrbitalScene ? (
                   <Suspense fallback={<SceneFallback />}>
                     {sceneInView ? <ContactOrbitalScene /> : <SceneFallback />}

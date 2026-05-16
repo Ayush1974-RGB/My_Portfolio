@@ -1,10 +1,27 @@
 import { motion as Motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const INTERACTION_QUERY = '(hover: hover) and (pointer: fine) and (min-width: 1024px)';
 
-export default function Magnetic({ children, className = '', strength = 7 }) {
+function getDistanceToRect(pointerX, pointerY, bounds) {
+  const dx =
+    pointerX < bounds.left ? bounds.left - pointerX : pointerX > bounds.right ? pointerX - bounds.right : 0;
+  const dy =
+    pointerY < bounds.top ? bounds.top - pointerY : pointerY > bounds.bottom ? pointerY - bounds.bottom : 0;
+
+  return Math.hypot(dx, dy);
+}
+
+export default function Magnetic({
+  children,
+  className = '',
+  strength = 7,
+  proximity = false,
+  proximityRadius = 118,
+  proximityStrength,
+}) {
   const elementRef = useRef(null);
+  const hoverRef = useRef(false);
   const prefersReducedMotion = useReducedMotion();
   const [enabled, setEnabled] = useState(false);
 
@@ -33,11 +50,11 @@ export default function Magnetic({ children, className = '', strength = 7 }) {
 
   const isInteractive = enabled && !prefersReducedMotion;
 
-  const resetPosition = () => {
+  const resetPosition = useCallback(() => {
     x.set(0);
     y.set(0);
     scale.set(1);
-  };
+  }, [scale, x, y]);
 
   const setPressScale = () => {
     scale.set(isInteractive ? 0.996 : 0.99);
@@ -47,19 +64,72 @@ export default function Magnetic({ children, className = '', strength = 7 }) {
     scale.set(isInteractive ? 1.008 : 1);
   };
 
+  const setMagneticOffset = useCallback((clientX, clientY, intensity) => {
+    if (!elementRef.current) {
+      return;
+    }
+
+    const bounds = elementRef.current.getBoundingClientRect();
+    const offsetX = clientX - (bounds.left + bounds.width / 2);
+    const offsetY = clientY - (bounds.top + bounds.height / 2);
+    const maxShiftX = Math.max(bounds.width * 0.14, 10);
+    const maxShiftY = Math.max(bounds.height * 0.14, 10);
+    const nextX = Math.max(-maxShiftX, Math.min(maxShiftX, (offsetX / bounds.width) * intensity * 2.4));
+    const nextY = Math.max(-maxShiftY, Math.min(maxShiftY, (offsetY / bounds.height) * intensity * 2.4));
+
+    x.set(nextX);
+    y.set(nextY);
+  }, [x, y]);
+
   const handleMouseMove = (event) => {
     if (!isInteractive || !elementRef.current) {
       return;
     }
 
-    const bounds = elementRef.current.getBoundingClientRect();
-    const offsetX = event.clientX - (bounds.left + bounds.width / 2);
-    const offsetY = event.clientY - (bounds.top + bounds.height / 2);
-
-    x.set((offsetX / bounds.width) * strength * 2);
-    y.set((offsetY / bounds.height) * strength * 2);
-    scale.set(1.008);
+    setMagneticOffset(event.clientX, event.clientY, strength + 4);
+    scale.set(1.014);
   };
+
+  useEffect(() => {
+    if (!isInteractive || !proximity) {
+      resetPosition();
+      return undefined;
+    }
+
+    const handlePointerMove = (event) => {
+      if (hoverRef.current || !elementRef.current) {
+        return;
+      }
+
+      const bounds = elementRef.current.getBoundingClientRect();
+      const distance = getDistanceToRect(event.clientX, event.clientY, bounds);
+
+      if (distance > proximityRadius) {
+        resetPosition();
+        return;
+      }
+
+      const intensity = 1 - distance / proximityRadius;
+      const appliedStrength = (proximityStrength ?? strength * 1.45) * (0.32 + intensity);
+
+      setMagneticOffset(event.clientX, event.clientY, appliedStrength);
+      scale.set(1 + intensity * 0.028);
+    };
+
+    const handleWindowLeave = () => {
+      if (!hoverRef.current) {
+        resetPosition();
+      }
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    window.addEventListener('blur', handleWindowLeave);
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('blur', handleWindowLeave);
+    };
+  }, [isInteractive, proximity, proximityRadius, proximityStrength, resetPosition, scale, setMagneticOffset, strength]);
 
   return (
     <Motion.div
@@ -68,11 +138,15 @@ export default function Magnetic({ children, className = '', strength = 7 }) {
       style={isInteractive ? { x: springX, y: springY, scale: springScale } : undefined}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => {
+        hoverRef.current = true;
         if (isInteractive) {
-          scale.set(1.008);
+          scale.set(1.014);
         }
       }}
-      onMouseLeave={resetPosition}
+      onMouseLeave={() => {
+        hoverRef.current = false;
+        resetPosition();
+      }}
       onPointerDownCapture={setPressScale}
       onPointerUpCapture={setRestingScale}
       onPointerCancel={resetPosition}

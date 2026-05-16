@@ -9,16 +9,19 @@ function SiteFooter({ profile, footer, onOpenResume }) {
             {profile.name}
           </p>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-foreground-muted">{footer.note}</p>
+          <p className="mt-2 text-xs uppercase tracking-[0.18em] text-foreground-muted/85">
+            Made with love by ary_02
+          </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-foreground-muted md:justify-end">
+        <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-foreground-muted max-[420px]:grid max-[420px]:w-full max-[420px]:grid-cols-2 md:justify-end">
           {footer.socials.map((social) => (
             social.name === 'Resume' ? (
               <button
                 key={social.name}
                 type="button"
                 onClick={onOpenResume}
-                className="inline-flex min-h-10 items-center justify-center rounded-full border border-border bg-background/72 px-4 py-2 font-medium transition-colors duration-300 hover:border-accent/35 hover:text-accent"
+                className="inline-flex min-h-10 items-center justify-center rounded-full border border-border bg-background/72 px-4 py-2 font-medium transition-colors duration-300 hover:border-accent/35 hover:text-accent max-[420px]:w-full"
               >
                 {social.name}
               </button>
@@ -28,13 +31,13 @@ function SiteFooter({ profile, footer, onOpenResume }) {
                 href={social.url}
                 target={social.url.startsWith('http') ? '_blank' : undefined}
                 rel={social.url.startsWith('http') ? 'noreferrer' : undefined}
-                className="inline-flex min-h-10 items-center justify-center rounded-full border border-border bg-background/72 px-4 py-2 font-medium transition-colors duration-300 hover:border-accent/35 hover:text-accent"
+                className="inline-flex min-h-10 items-center justify-center rounded-full border border-border bg-background/72 px-4 py-2 font-medium transition-colors duration-300 hover:border-accent/35 hover:text-accent max-[420px]:w-full"
               >
                 {social.name}
               </a>
             )
           ))}
-          <span className="basis-full text-xs uppercase tracking-[0.18em] text-foreground-muted/90 md:ml-1 md:basis-auto">
+          <span className="basis-full text-xs uppercase tracking-[0.18em] text-foreground-muted/90 max-[420px]:col-span-2 md:ml-1 md:basis-auto">
             &copy; {new Date().getFullYear()} All rights reserved.
           </span>
         </div>

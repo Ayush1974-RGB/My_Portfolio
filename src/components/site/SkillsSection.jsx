@@ -22,26 +22,43 @@ function SkillsSection({ skills }) {
           centered
         />
 
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-foreground-muted">
+          {skills.categories.map((category, index) => (
+            <div key={category.title} className="inline-flex items-center gap-3 rounded-full border border-border bg-background/72 px-3 py-1.5">
+              <span>{category.eyebrow}</span>
+              {index < skills.categories.length - 1 ? (
+                <span className="h-px w-6 bg-gradient-to-r from-accent/55 to-transparent" aria-hidden="true" />
+              ) : null}
+            </div>
+          ))}
+        </div>
+
         <ScrollScene intensity="medium">
-          <StaggerGroup className="mt-16 grid gap-6 lg:grid-cols-[0.92fr_1.16fr_0.92fr] lg:items-start" stagger={0.1}>
+          <StaggerGroup className="mt-12 grid gap-5 sm:mt-16 md:grid-cols-2 xl:grid-cols-[0.92fr_1.16fr_0.92fr] xl:items-start" stagger={0.1}>
             {skills.categories.map((category, index) => {
               const isHighlighted = Boolean(category.highlighted);
               const offsetClass =
                 index === 0
-                  ? 'lg:translate-y-4'
+                  ? 'xl:translate-y-4'
                   : index === 2
-                    ? 'lg:translate-y-8'
-                    : 'lg:-translate-y-2';
+                    ? 'xl:translate-y-8'
+                    : 'xl:-translate-y-2';
+              const tabletSpanClass = index === skills.categories.length - 1 ? 'md:col-span-2 xl:col-span-1' : '';
 
               return (
-                <Motion.div key={category.title} variants={createStaggerItem(20, 0.5)} className="h-full">
+                <Motion.div
+                  key={category.title}
+                  variants={createStaggerItem(20, 0.5)}
+                  className={`h-full ${tabletSpanClass}`}
+                >
                   <Motion.article
                     whileHover={{ y: -3, scale: 1.006 }}
                     transition={{ duration: 0.28, ease: MOTION_EASE }}
-                    className={`skills-card-shell interactive-outline relative h-full overflow-hidden rounded-[2.2rem] p-6 sm:p-7 ${offsetClass} ${
+                    className={`skills-card-shell interactive-outline relative h-full overflow-hidden rounded-[2rem] p-5 sm:rounded-[2.2rem] sm:p-7 ${offsetClass} ${
                       isHighlighted ? 'skills-card-shell--highlighted' : ''
                     }`}
                   >
+                    {isHighlighted ? <span aria-hidden="true" className="skills-card-signal-wave" /> : null}
                     <div className="relative z-10 flex h-full flex-col">
                       <div className="flex items-start justify-between gap-4">
                         <div>
@@ -89,8 +106,9 @@ function SkillsSection({ skills }) {
 
                       <ul className="mt-9 space-y-4">
                         {category.items.map((item) => (
-                          <li
+                          <Motion.li
                             key={item}
+                            whileHover={{ x: 4 }}
                             className={`flex items-start gap-3 text-sm leading-6 sm:text-[0.96rem] ${
                               isHighlighted ? 'text-accent-foreground' : 'text-foreground'
                             }`}
@@ -99,9 +117,9 @@ function SkillsSection({ skills }) {
                               className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${
                                 isHighlighted ? 'bg-accent-foreground' : 'bg-accent'
                               }`}
-                            />
+                              />
                             <span>{item}</span>
-                          </li>
+                          </Motion.li>
                         ))}
                       </ul>
                     </div>

@@ -37,12 +37,13 @@ export const portfolioData = {
   },
   navigation: [
     { id: 'hero', label: 'Home' },
-    { id: 'statement', label: 'Belief' },
     { id: 'about', label: 'Approach' },
     { id: 'skills', label: 'Skills' },
+    { id: 'security', label: 'Security' },
+    { id: 'learning', label: 'Growth' },
     { id: 'projects', label: 'Work' },
+    { id: 'clubs', label: 'Clubs' },
     { id: 'experience', label: 'Impact' },
-    { id: 'contact', label: 'Contact' },
   ],
   hero: {
     eyebrow: 'Developer / Cybersecurity / Secure Systems',
@@ -52,7 +53,7 @@ export const portfolioData = {
       'Computer Science student at NITK looking for internship roles where I can contribute polished React interfaces, dependable product engineering, and security-aware thinking from day one.',
     whyMe:
       'I combine product polish, clean implementation, and a growing security lens, which makes me a strong fit for frontend-heavy product teams and software engineering internships.',
-    badges: ['Open to Internships', 'React + MERN', 'Security-Aware Builds'],
+    badges: [],
     callouts: [
       {
         label: 'What I bring',
@@ -246,10 +247,92 @@ export const portfolioData = {
     note:
       'This learning path is shaping the kind of engineer I want to become: someone who builds clean interfaces with stronger security and systems judgment underneath.',
   },
+  clubs: {
+    label: 'Clubs & Communities',
+    title: 'Student roles where I lead web execution and contribute beyond the classroom.',
+    introduction:
+      'This section shows how I work in real communities around campus: leading web work, coordinating technical activity, supporting public-facing event delivery, and contributing to a wellness-focused club environment.',
+    overviewTitle: 'Positions that sharpen leadership, collaboration, and delivery.',
+    overviewDescription:
+      'Together these roles stretch different parts of how I work: team ownership, technical coordination, dependable frontend execution, and community consistency beyond coding alone.',
+    stats: [
+      { value: '04', label: 'Active positions', valueClassName: 'text-foreground' },
+      { value: '03', label: 'Web and tech roles', valueClassName: 'text-accent' },
+      { value: '01', label: 'Wellness role', valueClassName: 'text-foreground' },
+    ],
+    focusAreas: [
+      'Taking ownership in public-facing work and team-facing delivery.',
+      'Coordinating with people, not just code, across technical communities.',
+      'Balancing leadership, execution, and consistency across different kinds of campus roles.',
+    ],
+    roles: [
+      {
+        eyebrow: 'Lead build track',
+        title: 'Web Team Lead',
+        org: 'AeroNITK',
+        period: '2024 - Present',
+        location: 'NITK Surathkal',
+        summary:
+          'Leading the web presence for AeroNITK and helping shape how the team presents projects, achievements, recruitment, and updates online.',
+        points: [
+          'Driving website structure, content flow, and frontend quality for the public team presence',
+          'Keeping the experience responsive, clearer to navigate, and easier for the team to maintain',
+          'Translating team goals into dependable React implementation and rollout decisions',
+        ],
+        tags: ['Leadership', 'React', 'Public Website'],
+      },
+      {
+        eyebrow: 'Security community',
+        title: 'CRYPT SIG Coordinator',
+        org: 'ISTE NITK',
+        period: '2024 - Present',
+        location: 'NITK Surathkal',
+        summary:
+          'Coordinating the CRYPT SIG track at ISTE NITK and supporting peer learning around cybersecurity, technical discussion, and community engagement.',
+        points: [
+          'Helping organize SIG activity, communication, and member-facing coordination',
+          'Supporting a community space for security-focused learning and technical curiosity',
+          'Building experience in leading structured technical participation, not just attending it',
+        ],
+        tags: ['Cybersecurity', 'Coordination', 'Community'],
+      },
+      {
+        eyebrow: 'Event platform',
+        title: 'Web Developer',
+        org: 'TEDxNITK Surathkal',
+        period: '2024 - Present',
+        location: 'NITK Surathkal',
+        summary:
+          'Contributing to the TEDxNITK web presence with clean frontend delivery, dependable updates, and attention to presentation quality.',
+        points: [
+          'Maintaining the website experience for a public-facing event and brand presence',
+          'Improving responsiveness, clarity, and reliability across content updates',
+          'Working within tighter brand and delivery constraints than a typical side project',
+        ],
+        tags: ['Frontend', 'Brand Systems', 'Delivery'],
+      },
+      {
+        eyebrow: 'Campus community',
+        title: 'Executive Member',
+        org: 'Yoga Club',
+        period: '2024 - Present',
+        location: 'NITK Surathkal',
+        summary:
+          'Contributing to a wellness-focused student community and supporting club activity beyond purely technical spaces.',
+        points: [
+          'Taking part in club coordination and community-facing responsibilities',
+          'Staying involved in campus life through a role centered on consistency and service',
+          'Balancing technical work with a community role that adds perspective and discipline',
+        ],
+        tags: ['Community', 'Operations', 'Consistency'],
+      },
+    ],
+  },
   projects: {
     label: 'What I Built',
     title: 'Featured Projects',
-    subtitle: 'A selection of projects where frontend craft, systems thinking, and security-aware engineering come together in tangible work.',
+    subtitle:
+      'A selection of projects where frontend craft, systems thinking, and security-aware engineering come together in tangible product work, technical prototypes, and applied learning.',
     items: [
       {
         index: '01',
@@ -285,13 +368,13 @@ export const portfolioData = {
       },
       {
         index: '02',
-        name: 'Aeronitk Website',
+        name: 'AeroNITK Website',
         summary:
           'Responsive team website with reusable sections, clearer information architecture, and faster content updates for a student engineering team.',
         description:
           'Developed the Team AeroNITK website with reusable React sections, responsive layouts, and cleaner information flow for projects, achievements, and updates. The result was a more maintainable frontend that improved content clarity and made team-facing updates easier to ship.',
         outcome:
-          'Delivered a live team website that improved discoverability, maintainability, and the clarity of the club’s public web presence.',
+          'Delivered a live team website that improved discoverability, maintainability, and the clarity of the club\'s public web presence.',
         thumbnail: {
           eyebrow: 'Frontend System',
           title: 'Responsive Team Platform',
@@ -403,9 +486,16 @@ export const portfolioData = {
   },
   experience: {
     label: 'Why It Matters',
-    title: 'The work matters because it compounds into stronger engineering judgment and clearer technical direction.',
+    title: 'The broader signals behind my direction get clearer with every shipped build and learning cycle.',
     introduction:
-      'Projects, live web work, and focused learning are all reinforcing how I think about delivery, reliability, collaboration, and the kind of engineer I want to become.',
+      'Beyond individual club positions, this page captures the bigger milestones shaping my engineering judgment: live delivery, academic foundations, and focused technical learning.',
+    sidebarTitle: 'Impact comes from stacking work, study, and follow-through.',
+    sidebarDescription:
+      'The timeline on the right focuses on the higher-level signals behind my growth so the broader story stays separate from the club positions in the navbar.',
+    signalStats: [
+      { value: '02', label: 'Live builds', valueClassName: 'text-foreground' },
+      { value: '03', label: 'Core signals', valueClassName: 'text-accent' },
+    ],
     highlights: [
       { value: '02', label: 'Active web roles' },
       { value: '04+', label: 'Credentials and certifications' },
@@ -413,49 +503,34 @@ export const portfolioData = {
     ],
     timeline: [
       {
-        type: 'Role',
-        title: 'Executive Member - Technical Team',
-        org: 'ISTE NITK',
+        type: 'Delivery',
+        title: 'Public-facing web delivery through live builds',
+        org: 'Portfolio + team website work',
         period: 'Aug 2024 - Present',
-        location: 'Mangaluru, Karnataka',
+        location: 'Remote / NITK',
         summary:
-          'Contributing to technical initiatives and student-facing programming activities through the technical team at ISTE NITK.',
+          'Shipping live interfaces has strengthened how I think about clarity, responsiveness, maintainability, and how products are actually experienced by real users.',
         points: [
-          'Coordinating technical initiatives and workshops for 200+ student members',
-          'Supporting skill development in emerging technologies and engineering practice',
-          'Collaborating with cross-functional teams to organize technical events and coding competitions',
+          'Delivered live React websites with clearer information architecture and reusable UI sections',
+          'Used deployment as a forcing function for polish, responsiveness, and production-minded thinking',
+          'Built stronger judgment around what makes a frontend experience feel reliable and recruiter-ready',
         ],
-        tags: ['Leadership', 'Workshops', 'Technical Team'],
+        tags: ['React', 'Vercel', 'Product Delivery'],
       },
       {
-        type: 'Role',
-        title: 'Web Developer',
-        org: 'Team AeroNITK',
+        type: 'Learning',
+        title: 'Self-directed credentials and technical depth',
+        org: 'Security, AI, and systems learning',
         period: 'Aug 2024 - Present',
-        location: 'Mangaluru, Karnataka',
+        location: 'Coursework + independent practice',
         summary:
-          'Serving as a web developer for Team AeroNITK by designing and maintaining the team website and improving how technical work is presented online.',
+          'Certifications, focused learning, and project work are helping me connect secure systems thinking with practical frontend and software engineering execution.',
         points: [
-          'Designing and maintaining the official team website',
-          'Presenting projects, achievements, and updates through cleaner frontend structure',
-          'Applying responsive React patterns to improve usability across devices',
+          'Building momentum through learning in Git, data protection, AI workflows, and agentic systems',
+          'Connecting classroom fundamentals with hands-on prototypes in networking, routing, and identity-aware design',
+          'Using project work to turn abstract concepts into applied engineering judgment',
         ],
-        tags: ['React', 'Frontend', 'Collaboration'],
-      },
-      {
-        type: 'Role',
-        title: 'Web Developer',
-        org: 'TEDxNITK Surathkal',
-        period: 'Aug 2024 - Present',
-        location: 'Mangaluru, Karnataka',
-        summary:
-          'Helping design and maintain the TEDxNITK Surathkal web presence with a focus on clean frontend delivery and dependable updates.',
-        points: [
-          'Designing and maintaining the official website experience',
-          'Improving content presentation, responsiveness, and interaction quality',
-          'Working with production-facing design and delivery constraints',
-        ],
-        tags: ['React', 'Web', 'Delivery'],
+        tags: ['Credentials', 'Security', 'Systems'],
       },
       {
         type: 'Education',
@@ -479,13 +554,13 @@ export const portfolioData = {
       'Agentic AI',
       'Protect Sensitive Data with Data Loss Prevention',
     ],
-    associations: ['TEDxNITKSurathkal', 'Team AeroNITK', 'ISTE NITK', 'Cybersecurity Learner'],
+    associations: ['AeroNITK', 'TEDxNITK Surathkal', 'ISTE NITK', 'Yoga Club', 'Cybersecurity Learner'],
   },
   contact: {
     label: 'How To Reach Me',
-    title: 'Available for software engineering, frontend, and security-focused internship opportunities.',
-    ctaText: "Let's work together.",
-    cta: 'Let’s build something secure and useful.',
+    title: 'Available for software engineering, frontend, and security-aware internship opportunities.',
+    ctaText: "Let's build something secure and useful.",
+    cta: "Let's build something secure and useful.",
     description:
       'I am looking for teams where I can contribute clean frontend execution, strong product instincts, and a growing cybersecurity mindset in real engineering work.',
     note: 'Email is the fastest way to reach me. You can also review my work on GitHub, connect on LinkedIn, or open my resume directly below.',

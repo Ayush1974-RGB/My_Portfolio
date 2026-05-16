@@ -1,23 +1,35 @@
-import { lazy, memo, Suspense, useCallback, useEffect, useState } from 'react';
-import { AnimatePresence, MotionConfig } from 'framer-motion';
+import { lazy, memo, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, MotionConfig, motion as Motion } from 'framer-motion';
 import { MOTION_DURATION, MOTION_EASE } from './animations/variants';
 import { portfolioData } from './data/portfolioData';
 import { useTheme } from './hooks/useTheme';
-import DeferredSection from './components/site/DeferredSection';
 import SiteHeader from './components/site/SiteHeader';
 import HeroSection from './components/site/HeroSection';
+import SitePreloader from './components/site/SitePreloader';
+import SignalTape from './components/site/SignalTape';
 import KeyHighlightsSection from './components/site/KeyHighlightsSection';
-import SectionTransition from './components/site/SectionTransition';
+import StatementSection from './components/site/StatementSection';
 import AboutSection from './components/site/AboutSection';
 import SkillsSection from './components/site/SkillsSection';
+import SecurityMindsetSection from './components/site/SecurityMindsetSection';
+import CurrentlyLearningSection from './components/site/CurrentlyLearningSection';
 import SiteFooter from './components/site/SiteFooter';
-import ResumeModal from './components/site/ResumeModal';
 
-const ScrollProgress = lazy(() => import('./components/site/ScrollProgress'));
-const CustomCursor = lazy(() => import('./components/site/CustomCursor'));
-const ProjectsSection = lazy(() => import('./components/site/ProjectsSection'));
-const ExperienceSection = lazy(() => import('./components/site/ExperienceSection'));
-const ContactSection = lazy(() => import('./components/site/ContactSection'));
+const loadScrollProgress = () => import('./components/site/ScrollProgress');
+const loadCustomCursor = () => import('./components/site/CustomCursor');
+const loadProjectsSection = () => import('./components/site/ProjectsSection');
+const loadClubsSection = () => import('./components/site/ClubsSection');
+const loadExperienceSection = () => import('./components/site/ExperienceSection');
+const loadContactSection = () => import('./components/site/ContactSection');
+const loadResumeModal = () => import('./components/site/ResumeModal');
+
+const ScrollProgress = lazy(loadScrollProgress);
+const CustomCursor = lazy(loadCustomCursor);
+const ProjectsSection = lazy(loadProjectsSection);
+const ClubsSection = lazy(loadClubsSection);
+const ExperienceSection = lazy(loadExperienceSection);
+const ContactSection = lazy(loadContactSection);
+const ResumeModal = lazy(loadResumeModal);
 
 const LazySectionFallback = memo(function LazySectionFallback({ id, className = 'section-space' }) {
   return (
@@ -27,33 +39,99 @@ const LazySectionFallback = memo(function LazySectionFallback({ id, className = 
   );
 });
 
+function getClientCapabilities() {
+  if (typeof window === 'undefined') {
+    return {
+      canRunEnhancements: false,
+      canUseHeavyEnhancements: false,
+      saveDataEnabled: false,
+      lowBandwidth: false,
+      prefersReducedMotion: false,
+    };
+  }
+
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const saveDataEnabled = Boolean(connection?.saveData);
+  const lowBandwidth = typeof connection?.effectiveType === 'string' && /2g/.test(connection.effectiveType);
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const deviceMemory = navigator.deviceMemory ?? 4;
+  const hardwareConcurrency = navigator.hardwareConcurrency ?? 4;
+  const canRunEnhancements = !saveDataEnabled && !lowBandwidth && !prefersReducedMotion;
+  const canUseHeavyEnhancements = canRunEnhancements && hardwareConcurrency >= 6 && deviceMemory >= 4;
+
+  return {
+    canRunEnhancements,
+    canUseHeavyEnhancements,
+    saveDataEnabled,
+    lowBandwidth,
+    prefersReducedMotion,
+  };
+}
+
+function resolvePageId(validIds, fallbackId) {
+  if (typeof window === 'undefined') {
+    return fallbackId;
+  }
+
+  const hashId = window.location.hash.replace('#', '').trim();
+  return validIds.includes(hashId) ? hashId : fallbackId;
+}
+
 export default function App() {
   const { theme, toggleTheme } = useTheme();
-  const [resumeOpen, setResumeOpen] = useState(false);
-  const [enhancementsReady, setEnhancementsReady] = useState(false);
-  const [allowCustomCursor, setAllowCustomCursor] = useState(false);
-  const [allowHeavyVisuals, setAllowHeavyVisuals] = useState(false);
-  const openResume = useCallback(() => setResumeOpen(true), []);
-  const closeResume = useCallback(() => setResumeOpen(false), []);
-
-  useEffect(() => {
+  const [showIntro, setShowIntro] = useState(() => {
     if (typeof window === 'undefined') {
-      return undefined;
+      return false;
     }
 
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    const saveDataEnabled = Boolean(connection?.saveData);
-    const lowBandwidth = typeof connection?.effectiveType === 'string' && /2g/.test(connection.effectiveType);
+    const hasSeenIntro = window.sessionStorage.getItem('portfolio-intro-seen') === 'true';
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const deviceMemory = navigator.deviceMemory ?? 4;
-    const hardwareConcurrency = navigator.hardwareConcurrency ?? 4;
-    const canRunEnhancements = !saveDataEnabled && !lowBandwidth && !prefersReducedMotion;
+    return !hasSeenIntro && !prefersReducedMotion;
+  });
+  const [resumeOpen, setResumeOpen] = useState(false);
+  const [enhancementsReady, setEnhancementsReady] = useState(false);
+  const clientCapabilities = getClientCapabilities();
+  const allowCustomCursor = clientCapabilities.canUseHeavyEnhancements;
+  const allowHeavyVisuals = clientCapabilities.canUseHeavyEnhancements;
+  const pageIds = useMemo(
+    () => portfolioData.navigation.map(({ id }) => id),
+    []
+  );
+  const defaultPageId = pageIds[0] ?? 'hero';
+  const [activePageId, setActivePageId] = useState(() => resolvePageId(pageIds, defaultPageId));
+  const openResume = useCallback(() => setResumeOpen(true), []);
+  const closeResume = useCallback(() => setResumeOpen(false), []);
+  const closeIntro = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.setItem('portfolio-intro-seen', 'true');
+    }
 
-    setAllowCustomCursor(canRunEnhancements && hardwareConcurrency >= 6 && deviceMemory >= 4);
-    setAllowHeavyVisuals(canRunEnhancements && hardwareConcurrency >= 6 && deviceMemory >= 4);
+    setShowIntro(false);
+  }, []);
+  const tapeItems = [
+    portfolioData.profile.secondaryRole,
+    ...portfolioData.hero.badges,
+    portfolioData.about.facts[1]?.value,
+    'NITK CSE',
+    'Portfolio engineered for recruiter clarity',
+  ].filter(Boolean);
+  const navigateToPage = useCallback(
+    (id) => {
+      if (!pageIds.includes(id)) {
+        return;
+      }
 
-    if (!canRunEnhancements) {
-      setEnhancementsReady(false);
+      setActivePageId(id);
+
+      if (typeof window !== 'undefined' && window.location.hash !== `#${id}`) {
+        window.location.hash = id;
+      }
+    },
+    [pageIds]
+  );
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !clientCapabilities.canRunEnhancements) {
       return undefined;
     }
 
@@ -66,7 +144,130 @@ export default function App() {
 
     const timeoutId = window.setTimeout(enableEnhancements, 700);
     return () => window.clearTimeout(timeoutId);
-  }, []);
+  }, [clientCapabilities.canRunEnhancements]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    if (clientCapabilities.saveDataEnabled || clientCapabilities.lowBandwidth) {
+      return undefined;
+    }
+
+      const warmModules = () => {
+        const preloaders = [
+          loadProjectsSection(),
+          loadClubsSection(),
+          loadExperienceSection(),
+          loadContactSection(),
+          loadResumeModal(),
+          loadScrollProgress(),
+        ];
+
+      if (!clientCapabilities.prefersReducedMotion && clientCapabilities.canUseHeavyEnhancements) {
+        preloaders.push(loadCustomCursor());
+      }
+
+      void Promise.allSettled(preloaders);
+    };
+
+    if ('requestIdleCallback' in window) {
+      const idleId = window.requestIdleCallback(warmModules, { timeout: 1800 });
+      return () => window.cancelIdleCallback(idleId);
+    }
+
+    const timeoutId = window.setTimeout(warmModules, 1100);
+    return () => window.clearTimeout(timeoutId);
+  }, [
+    clientCapabilities.canUseHeavyEnhancements,
+    clientCapabilities.lowBandwidth,
+    clientCapabilities.prefersReducedMotion,
+    clientCapabilities.saveDataEnabled,
+  ]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const syncPageFromHash = () => {
+      setActivePageId(resolvePageId(pageIds, defaultPageId));
+    };
+
+    window.addEventListener('hashchange', syncPageFromHash);
+    syncPageFromHash();
+
+    return () => window.removeEventListener('hashchange', syncPageFromHash);
+  }, [defaultPageId, pageIds]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.scrollTo({
+      top: 0,
+      behavior: clientCapabilities.prefersReducedMotion ? 'auto' : 'smooth',
+    });
+  }, [activePageId, clientCapabilities.prefersReducedMotion]);
+
+  const activePage = useMemo(() => {
+    const homePage = (
+      <>
+        <HeroSection
+          profile={portfolioData.profile}
+          hero={portfolioData.hero}
+          keyHighlights={portfolioData.keyHighlights}
+          onOpenResume={openResume}
+          enableEnhancedEffects={false}
+        />
+        <SignalTape items={tapeItems} />
+        <KeyHighlightsSection keyHighlights={portfolioData.keyHighlights} />
+        <StatementSection statement={portfolioData.statement} />
+        <Suspense fallback={<LazySectionFallback id="contact" className="section-space pb-24 sm:pb-28" />}>
+          <ContactSection
+            contact={portfolioData.contact}
+            onOpenResume={openResume}
+            enableOrbitalScene={allowHeavyVisuals}
+          />
+        </Suspense>
+      </>
+    );
+
+    switch (activePageId) {
+      case 'hero':
+        return homePage;
+      case 'about':
+        return <AboutSection profile={portfolioData.profile} about={portfolioData.about} />;
+      case 'skills':
+        return <SkillsSection skills={portfolioData.skills} />;
+      case 'security':
+        return <SecurityMindsetSection securityFocus={portfolioData.securityFocus} />;
+      case 'learning':
+        return <CurrentlyLearningSection learning={portfolioData.currentlyLearning} />;
+      case 'projects':
+        return (
+          <Suspense fallback={<LazySectionFallback id="projects" />}>
+            <ProjectsSection projects={portfolioData.projects} />
+          </Suspense>
+        );
+      case 'clubs':
+        return (
+          <Suspense fallback={<LazySectionFallback id="clubs" />}>
+            <ClubsSection clubs={portfolioData.clubs} />
+          </Suspense>
+        );
+      case 'experience':
+        return (
+          <Suspense fallback={<LazySectionFallback id="experience" />}>
+            <ExperienceSection experience={portfolioData.experience} />
+          </Suspense>
+        );
+      default:
+        return homePage;
+    }
+  }, [activePageId, allowHeavyVisuals, openResume, tapeItems]);
 
   return (
     <MotionConfig
@@ -85,6 +286,17 @@ export default function App() {
         </a>
 
         <div className="relative min-h-screen overflow-x-clip bg-background text-foreground transition-colors duration-300 ease-in-out">
+          <AnimatePresence>
+            {showIntro ? (
+              <SitePreloader
+                key="site-preloader"
+                profile={portfolioData.profile}
+                hero={portfolioData.hero}
+                onFinish={closeIntro}
+              />
+            ) : null}
+          </AnimatePresence>
+
           {enhancementsReady ? (
             <Suspense fallback={null}>
               <ScrollProgress />
@@ -101,49 +313,22 @@ export default function App() {
             navigation={portfolioData.navigation}
             profile={portfolioData.profile}
             onOpenResume={openResume}
+            activeId={activePageId}
+            onNavigate={navigateToPage}
           />
 
           <main id="main-content" tabIndex="-1">
-            <HeroSection profile={portfolioData.profile} hero={portfolioData.hero} onOpenResume={openResume} />
-            <KeyHighlightsSection keyHighlights={portfolioData.keyHighlights} />
-            <AboutSection profile={portfolioData.profile} about={portfolioData.about} />
-            <SkillsSection skills={portfolioData.skills} />
-            <SectionTransition
-              step="What I Built"
-              title="The next section turns that capability into tangible work, with projects framed as engineering decisions, systems tradeoffs, and applied learning."
-            />
-            <DeferredSection
-              id="projects"
-              placeholderHeightClassName="min-h-[28rem]"
-              render={() => (
-                <Suspense fallback={<LazySectionFallback id="projects" />}>
-                  <ProjectsSection projects={portfolioData.projects} />
-                </Suspense>
-              )}
-            />
-            <DeferredSection
-              id="experience"
-              placeholderHeightClassName="min-h-[30rem]"
-              render={() => (
-                <Suspense fallback={<LazySectionFallback id="experience" />}>
-                  <ExperienceSection experience={portfolioData.experience} />
-                </Suspense>
-              )}
-            />
-            <DeferredSection
-              id="contact"
-              className="section-space pb-24 sm:pb-28"
-              placeholderHeightClassName="min-h-[24rem]"
-              render={() => (
-                <Suspense fallback={<LazySectionFallback id="contact" className="section-space pb-24 sm:pb-28" />}>
-                  <ContactSection
-                    contact={portfolioData.contact}
-                    onOpenResume={openResume}
-                    enableOrbitalScene={allowHeavyVisuals}
-                  />
-                </Suspense>
-              )}
-            />
+            <AnimatePresence mode="wait" initial={false}>
+              <Motion.div
+                key={activePageId}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -14 }}
+                transition={{ duration: 0.34, ease: MOTION_EASE }}
+              >
+                {activePage}
+              </Motion.div>
+            </AnimatePresence>
           </main>
 
           <SiteFooter profile={portfolioData.profile} footer={portfolioData.footer} onOpenResume={openResume} />

@@ -63,10 +63,36 @@ Allow: /
 Sitemap: ${siteUrl}/sitemap.xml
 `;
 
+const manifest = JSON.stringify(
+  {
+    name: 'Aryan Bokolia Portfolio',
+    short_name: 'Aryan Bokolia',
+    description:
+      'Portfolio of Aryan Bokolia, a cybersecurity-focused full-stack developer building secure web products, scalable systems, and polished digital experiences.',
+    start_url: '/',
+    scope: '/',
+    display: 'standalone',
+    lang: 'en-IN',
+    background_color: '#020617',
+    theme_color: '#020617',
+    icons: [
+      {
+        src: '/favicon.svg',
+        sizes: 'any',
+        type: 'image/svg+xml',
+        purpose: 'any',
+      },
+    ],
+  },
+  null,
+  2
+);
+
 await mkdir(publicDirectory, { recursive: true });
 await Promise.all([
   writeFile(resolve(publicDirectory, 'sitemap.xml'), sitemap, 'utf8'),
   writeFile(resolve(publicDirectory, 'robots.txt'), robots, 'utf8'),
+  writeFile(resolve(publicDirectory, 'site.webmanifest'), manifest, 'utf8'),
   writeFile(
     generatedEnvFile,
     `# Generated during build for Vite HTML/meta replacement.\nVITE_SITE_URL=${siteUrl}\n`,
@@ -74,4 +100,4 @@ await Promise.all([
   ),
 ]);
 
-console.log(`[seo] Generated robots.txt, sitemap.xml, and build env for ${siteUrl}`);
+console.log(`[seo] Generated robots.txt, sitemap.xml, site.webmanifest, and build env for ${siteUrl}`);

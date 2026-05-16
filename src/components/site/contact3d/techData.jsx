@@ -124,38 +124,23 @@ export const TECHNOLOGIES = [
   },
 ];
 
-export const SHELL_CONFIGS = [
+export const ORBIT_SHELLS = [
   {
     id: 'inner',
-    radius: 2.2,
-    speed: 0.28,
-    axisTheta: Math.PI * 0.24,
-    axisPhi: Math.PI * 0.43,
-    thetaOffset: 0.4,
-    tilt: [0.32, -0.18, 0.08],
-    floatAmplitude: 0.05,
-    floatSpeed: 1.2,
+    radius: '5.85rem',
+    duration: '18s',
+    direction: 'normal',
   },
   {
     id: 'middle',
-    radius: 2.85,
-    speed: -0.2,
-    axisTheta: Math.PI * 0.66,
-    axisPhi: Math.PI * 0.52,
-    thetaOffset: 1.25,
-    tilt: [-0.24, 0.3, -0.12],
-    floatAmplitude: 0.06,
-    floatSpeed: 0.95,
+    radius: '8.45rem',
+    duration: '25s',
+    direction: 'reverse',
   },
   {
     id: 'outer',
-    radius: 3.45,
-    speed: 0.14,
-    axisTheta: Math.PI * 1.14,
-    axisPhi: Math.PI * 0.61,
-    thetaOffset: 2.1,
-    tilt: [0.18, 0.46, 0.18],
-    floatAmplitude: 0.07,
-    floatSpeed: 0.82,
+    radius: '10.75rem',
+    duration: '33s',
+    direction: 'normal',
   },
 ];

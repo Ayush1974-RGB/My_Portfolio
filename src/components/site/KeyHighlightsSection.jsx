@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { motion as Motion } from 'framer-motion';
+import AnimatedCounter from './AnimatedCounter';
 import Reveal from './Reveal';
 import StaggerGroup from './StaggerGroup';
 import TextReveal from './TextReveal';
@@ -7,7 +8,7 @@ import { createStaggerItem } from './motion';
 
 function KeyHighlightsSection({ keyHighlights }) {
   return (
-    <section id="highlights" className="deferred-section pb-24 sm:pb-28">
+    <section id="highlights" className="deferred-section section-space pt-12 sm:pt-14 lg:pt-16">
       <div className="section-shell">
         <Reveal
           className="max-w-[44rem]"
@@ -26,7 +27,7 @@ function KeyHighlightsSection({ keyHighlights }) {
               text={keyHighlights.title}
               split="words"
               stagger={0.045}
-              className="mt-7 max-w-[16ch] text-[clamp(2.7rem,5.4vw,4.3rem)] font-bold leading-[0.92] tracking-[-0.06em] text-foreground"
+              className="mt-6 max-w-[16ch] text-balance text-[clamp(2.15rem,8vw,4.3rem)] font-bold leading-[0.94] tracking-[-0.06em] text-foreground sm:mt-7"
             />
           </Reveal.Item>
 
@@ -37,24 +38,48 @@ function KeyHighlightsSection({ keyHighlights }) {
           </Reveal.Item>
         </Reveal>
 
-        <StaggerGroup className="mt-14 grid gap-5 sm:grid-cols-2 xl:grid-cols-4" stagger={0.07}>
+        <div className="mt-8 flex flex-wrap items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-foreground-muted sm:mt-9">
+          <span className="rounded-full border border-border bg-background/72 px-3 py-1.5">Fast read</span>
+          <span className="h-px w-12 bg-gradient-to-r from-accent/50 to-transparent" aria-hidden="true" />
+          <span>Signals that explain the work before the projects even open.</span>
+        </div>
+
+        <StaggerGroup className="mt-10 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 xl:grid-cols-4" stagger={0.07}>
           {keyHighlights.items.map((item, index) => (
             <Motion.div key={item.label} variants={createStaggerItem(18, 0.46)} className="h-full">
-              <article
-                className={`key-highlight-card interactive-outline h-full rounded-[1.9rem] px-5 py-6 ${
-                  index === 1 ? 'xl:-translate-y-3' : index === 3 ? 'xl:translate-y-3' : ''
-                } transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1`}
+              <Motion.article
+                whileHover={{ y: -6, rotate: 0, scale: 1.01 }}
+                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                className={`key-highlight-card key-highlight-card--stacked interactive-outline h-full rounded-[1.9rem] px-5 py-6 ${
+                  index === 0
+                    ? 'xl:translate-y-1 xl:-rotate-[0.6deg]'
+                    : index === 1
+                      ? 'xl:-translate-y-2 xl:rotate-[0.45deg]'
+                      : index === 2
+                        ? 'xl:translate-y-2 xl:-rotate-[0.4deg]'
+                        : 'xl:translate-y-0.5 xl:rotate-[0.65deg]'
+                }`}
               >
-                <p className="text-[2.3rem] font-bold leading-none tracking-[-0.06em] text-foreground sm:text-[2.7rem]">
-                  {item.value}
-                </p>
+                <div className="key-highlight-beam" aria-hidden="true" />
+                <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-foreground-muted">
+                  Signal 0{index + 1}
+                </span>
+                <AnimatedCounter
+                  value={item.value}
+                  className="mt-4 block text-[2.3rem] font-bold leading-none tracking-[-0.06em] text-foreground sm:text-[2.7rem]"
+                />
                 <p className="mt-3 text-sm font-semibold uppercase tracking-[0.24em] text-foreground-muted">
                   {item.label}
                 </p>
                 <p className="mt-5 max-w-[22rem] text-sm leading-6 text-foreground-muted">
                   {item.description}
                 </p>
-              </article>
+
+                <div className="mt-6 flex items-center gap-2 text-[0.72rem] font-medium text-foreground-muted">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+                  <span>Readable in one glance</span>
+                </div>
+              </Motion.article>
             </Motion.div>
           ))}
         </StaggerGroup>
