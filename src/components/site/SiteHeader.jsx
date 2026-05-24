@@ -19,19 +19,42 @@ export default function SiteHeader({
   const [hoveredId, setHoveredId] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
   const logoCircleRef = useRef(null);
+  const lastScrollYRef = useRef(0);
   const prefersReducedMotion = useReducedMotion();
   const highlightedId = hoveredId ?? activeId;
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 24);
+      const currentScrollY = window.scrollY;
+      const previousScrollY = lastScrollYRef.current;
+      const scrollDelta = currentScrollY - previousScrollY;
+      const isNearTop = currentScrollY <= 24;
+
+      setScrolled(!isNearTop);
+
+      if (isNearTop) {
+        setHeaderHidden(false);
+      } else if (scrollDelta > 8) {
+        setHeaderHidden(true);
+      } else if (scrollDelta < -8) {
+        setHeaderHidden(false);
+      }
+
+      lastScrollYRef.current = currentScrollY;
     };
 
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (menuOpen) {
+      setHeaderHidden(false);
+    }
+  }, [menuOpen]);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -165,7 +188,17 @@ export default function SiteHeader({
   }, [onNavigate]);
 
   return (
-    <header className="sticky top-0 z-50 pt-2.5 sm:pt-5">
+    <Motion.header
+      className="sticky top-0 z-50 pt-2.5 sm:pt-5"
+      animate={{
+        y: headerHidden && !menuOpen ? '-115%' : '0%',
+      }}
+      transition={
+        prefersReducedMotion
+          ? { duration: 0 }
+          : { duration: 0.34, ease: [0.22, 1, 0.36, 1] }
+      }
+    >
       <div className="section-shell relative">
         <Motion.div
           initial={{ opacity: 0, y: -18 }}
@@ -363,6 +396,6 @@ export default function SiteHeader({
           ) : null}
         </AnimatePresence>
       </div>
-    </header>
+    </Motion.header>
   );
 }

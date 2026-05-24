@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import { motion as Motion, useReducedMotion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import SectionHeading from './SectionHeading';
 import StickySplitSection from './StickySplitSection';
 import { staggerList, listItem } from '../../animations/variants';
@@ -28,7 +28,6 @@ const ROLE_TONES = [
 ];
 
 function ClubsSection({ clubs }) {
-  const prefersReducedMotion = useReducedMotion();
   const stats = useMemo(() => clubs.stats ?? [], [clubs.stats]);
   const focusAreas = useMemo(() => clubs.focusAreas ?? [], [clubs.focusAreas]);
 

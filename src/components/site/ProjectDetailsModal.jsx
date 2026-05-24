@@ -1,5 +1,5 @@
 import { motion as Motion, useReducedMotion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Magnetic from './Magnetic';
 import ProjectThumbnail from './ProjectThumbnail';
 import { MOTION_EASE } from './motion';
@@ -282,8 +282,6 @@ function ProjectDetailsPanel({
 
 export default function ProjectDetailsModal({ project, onClose, tone = 'vector' }) {
   const reduceMotion = useReducedMotion();
-  const [dragDelta, setDragDelta] = useState(0);
-  const startYRef = useRef(0);
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -333,7 +331,6 @@ export default function ProjectDetailsModal({ project, onClose, tone = 'vector' 
         drag="y"
         dragElastic={{ top: 0.2, bottom: 0 }}
         dragConstraints={{ top: 0, bottom: 300 }}
-        onDrag={(event, info) => setDragDelta(info.offset.y)}
         onDragEnd={handleDragEnd}
         onClick={(event) => event.stopPropagation()}
         role="dialog"
