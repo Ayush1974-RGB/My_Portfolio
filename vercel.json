@@ -31,7 +31,7 @@
       ]
     },
     {
-      "source": "/(favicon\\.svg|site\\.webmanifest|robots\\.txt|sitemap\\.xml)",
+      "source": "/favicon.svg",
       "headers": [
         {
           "key": "Cache-Control",
@@ -40,7 +40,61 @@
       ]
     },
     {
-      "source": "/(Profile\\.(avif|webp|jpg)|Final_Resume\\.pdf)",
+      "source": "/site.webmanifest",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/robots.txt",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/Profile.avif",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/Profile.webp",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/Profile.jpg",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/Final_Resume.pdf",
       "headers": [
         {
           "key": "Cache-Control",
