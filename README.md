@@ -1,4 +1,4 @@
-# Aryan Bokolia Portfolio
+# Ayush Singhal Portfolio
 
 A premium developer portfolio built with React, Vite, Tailwind CSS v4, and Framer Motion.
 
