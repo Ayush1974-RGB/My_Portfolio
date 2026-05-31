@@ -7,12 +7,12 @@ import {
   SiLinux,
   SiMongodb,
   SiMysql,
+  SiNetlify,
   SiNextdotjs,
   SiNodedotjs,
   SiPython,
   SiReact,
   SiTailwindcss,
-  SiVercel,
   SiVscodium,
 } from 'react-icons/si';
 
@@ -39,10 +39,10 @@ export const TECHNOLOGIES = [
     shell: 'outer',
   },
   {
-    id: 'vercel',
-    label: 'Vercel',
-    color: '#F8FAFC',
-    Icon: SiVercel,
+    id: 'netlify',
+    label: 'Netlify',
+    color: '#00C7B7',
+    Icon: SiNetlify,
     shell: 'outer',
   },
   {

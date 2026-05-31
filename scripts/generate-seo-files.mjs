@@ -24,16 +24,15 @@ const configuredSiteUrl = cleanUrlCandidate(
   loadedEnv.VITE_SITE_URL || loadedEnv.SITE_URL || process.env.VITE_SITE_URL || process.env.SITE_URL
 );
 
-const vercelProductionUrl = cleanUrlCandidate(
-  process.env.VERCEL_PROJECT_PRODUCTION_URL || loadedEnv.VERCEL_PROJECT_PRODUCTION_URL
+const netlifyProductionUrl = cleanUrlCandidate(process.env.URL || loadedEnv.URL);
+const netlifyDeployUrl = cleanUrlCandidate(
+  process.env.DEPLOY_PRIME_URL || process.env.DEPLOY_URL || loadedEnv.DEPLOY_PRIME_URL || loadedEnv.DEPLOY_URL
 );
-
-const vercelDeploymentUrl = cleanUrlCandidate(process.env.VERCEL_URL || loadedEnv.VERCEL_URL);
 
 const resolvedSiteUrlCandidate =
   configuredSiteUrl ||
-  toAbsoluteUrl(vercelProductionUrl) ||
-  toAbsoluteUrl(vercelDeploymentUrl);
+  netlifyProductionUrl ||
+  netlifyDeployUrl;
 
 let siteUrl;
 
@@ -41,7 +40,7 @@ try {
   siteUrl = new URL(resolvedSiteUrlCandidate).toString().replace(/\/+$/, '');
 } catch {
   throw new Error(
-    '[seo] Missing a valid site URL. Set VITE_SITE_URL=https://your-domain.com, or on Vercel enable Automatically expose System Environment Variables so VERCEL_PROJECT_PRODUCTION_URL is available.'
+    '[seo] Missing a valid site URL. Set VITE_SITE_URL=https://your-domain.netlify.app, or set SITE_URL/URL in your hosting environment.'
   );
 }
 
@@ -65,10 +64,10 @@ Sitemap: ${siteUrl}/sitemap.xml
 
 const manifest = JSON.stringify(
   {
-    name: 'Aryan Bokolia Portfolio',
-    short_name: 'Aryan Bokolia',
+    name: 'Ayush Singhal Portfolio',
+    short_name: 'Ayush Singhal',
     description:
-      'Portfolio of Aryan Bokolia, a cybersecurity-focused full-stack developer building secure web products, scalable systems, and polished digital experiences.',
+      'Portfolio of Ayush Singhal, an AI-ML developer building intelligent web platforms, machine learning models, and data-driven applications.',
     start_url: '/',
     scope: '/',
     display: 'standalone',

@@ -125,6 +125,8 @@ function ContactSection({ contact, onOpenResume, enableOrbitalScene = true }) {
                   <Magnetic>
                     <a
                       href={emailLink?.href}
+                      target={emailLink?.href?.startsWith('http') ? '_blank' : undefined}
+                      rel={emailLink?.href?.startsWith('http') ? 'noreferrer' : undefined}
                       className="button-primary w-full min-[460px]:w-auto"
                       aria-label={contact.primaryActionLabel}
                     >

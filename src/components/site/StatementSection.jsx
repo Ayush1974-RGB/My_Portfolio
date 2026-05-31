@@ -6,18 +6,18 @@ import TextReveal from './TextReveal';
 const STATEMENT_LAYERS = [
   {
     step: '01',
-    title: 'Interface clarity',
-    detail: 'Readable, fast, and intentional product surfaces.',
+    title: 'Data clarity',
+    detail: 'Clean preprocessing and readable signals before modeling.',
   },
   {
     step: '02',
-    title: 'System flow',
-    detail: 'APIs, state, and edge cases aligned underneath.',
+    title: 'Model flow',
+    detail: 'Training, inference, and evaluation connected with purpose.',
   },
   {
     step: '03',
-    title: 'Secure defaults',
-    detail: 'Identity, trust, and safer engineering decisions built in.',
+    title: 'Product delivery',
+    detail: 'APIs and interfaces that make predictions useful.',
   },
 ];
 
@@ -40,11 +40,11 @@ function StatementSection({ statement }) {
               />
               <p className="mt-6 max-w-[30rem] text-[0.98rem] leading-[1.78] text-slate-300 sm:text-[1.03rem]">{statement.supporting}</p>
               <p className="mt-8 max-w-[23rem] font-editorial text-[1.55rem] italic leading-[1.08] text-slate-200 sm:text-[1.95rem]">
-                Product polish, network awareness, and security-minded execution.
+                Model quality, clean APIs, and user-focused AI delivery.
               </p>
 
               <div className="mt-8 flex flex-wrap justify-center gap-2.5 lg:justify-start">
-                {['Identity', 'Network behavior', 'Trust by design'].map((item) => (
+                {['Model inference', 'Data pipelines', 'Usable AI'].map((item) => (
                   <span
                     key={item}
                     className="rounded-full border border-white/12 bg-white/6 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-200"
@@ -65,7 +65,7 @@ function StatementSection({ statement }) {
 
                 <div className="statement-architecture__header">
                   <span className="statement-architecture__signal-dot" aria-hidden="true" />
-                  <span className="statement-architecture__label">Trust Architecture</span>
+                  <span className="statement-architecture__label">AI Architecture</span>
                 </div>
 
                 <div className="statement-architecture__layers">
@@ -89,7 +89,7 @@ function StatementSection({ statement }) {
                 <div className="statement-architecture__footer">
                   <span className="statement-architecture__footer-kicker">Outcome</span>
                   <p className="statement-architecture__footer-copy">
-                    Product polish on the surface, stronger trust underneath.
+                    Practical AI on the surface, stronger model flow underneath.
                   </p>
                 </div>
               </div>

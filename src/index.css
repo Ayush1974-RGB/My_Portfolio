@@ -711,6 +711,96 @@ html[data-theme='dark'] {
     color: var(--theme-foreground-muted);
   }
 
+  .hero-tech-cloud {
+    position: relative;
+    min-height: 13.5rem;
+    width: min(100%, 24rem);
+    isolation: isolate;
+  }
+
+  .hero-tech-cloud::before {
+    content: '';
+    position: absolute;
+    inset: 12% 8%;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--theme-accent) 12%, transparent), transparent 66%);
+    filter: blur(18px);
+    opacity: 0.72;
+    pointer-events: none;
+  }
+
+  .hero-tech-bubble {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    min-width: 5.8rem;
+    justify-content: center;
+    border-color: color-mix(in srgb, var(--theme-accent) 24%, var(--theme-border));
+    background:
+      radial-gradient(circle at 28% 18%, color-mix(in srgb, #ffffff 18%, transparent), transparent 34%),
+      linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--theme-accent) 9%, var(--theme-background)),
+        color-mix(in srgb, var(--theme-surface) 76%, transparent)
+      );
+    box-shadow:
+      0 10px 24px color-mix(in srgb, var(--theme-accent) 7%, transparent),
+      inset 0 1px 0 color-mix(in srgb, #ffffff 16%, transparent);
+    will-change: transform;
+    animation: hero-tech-bubble-float var(--bubble-duration) ease-in-out infinite;
+    animation-delay: var(--bubble-delay);
+  }
+
+  .hero-tech-bubble::after {
+    content: '';
+    position: absolute;
+    inset: 0.38rem auto auto 0.55rem;
+    width: 0.32rem;
+    height: 0.32rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-accent) 58%, transparent);
+    opacity: 0.42;
+    pointer-events: none;
+  }
+
+  @media (min-width: 640px) {
+    .hero-tech-bubble {
+      position: absolute;
+      left: var(--bubble-x);
+      top: var(--bubble-y);
+      transform: translate3d(0, 0, 0);
+    }
+
+    .hero-tech-bubble:nth-child(2),
+    .hero-tech-bubble:nth-child(7) {
+      margin-top: 0.65rem;
+    }
+
+    .hero-tech-bubble:nth-child(3),
+    .hero-tech-bubble:nth-child(8) {
+      margin-top: 1.45rem;
+    }
+
+    .hero-tech-bubble:nth-child(4),
+    .hero-tech-bubble:nth-child(9) {
+      margin-top: 0.35rem;
+    }
+
+    .hero-tech-bubble:nth-child(5),
+    .hero-tech-bubble:nth-child(10) {
+      margin-top: 1.15rem;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .hero-tech-cloud {
+      display: flex;
+      min-height: auto;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
+  }
+
   .hero-command-shell::after {
     content: '';
     position: absolute;
@@ -1433,6 +1523,7 @@ html[data-theme='dark'] {
   .project-detail-scroll {
     overscroll-behavior: contain;
     scrollbar-gutter: stable;
+    touch-action: pan-y;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -3131,6 +3222,21 @@ html[data-theme='dark'] .project-action--secondary:focus-visible {
   }
 }
 
+@keyframes hero-tech-bubble-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  35% {
+    transform: translate3d(calc(var(--bubble-drift) * 0.42rem), -0.7rem, 0) rotate(calc(var(--bubble-drift) * 1.2deg));
+  }
+
+  70% {
+    transform: translate3d(calc(var(--bubble-drift) * -0.34rem), 0.38rem, 0) rotate(calc(var(--bubble-drift) * -0.9deg));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -3151,6 +3257,7 @@ html[data-theme='dark'] .project-action--secondary:focus-visible {
   }
 
   .section-transition-slits span,
+  .hero-tech-bubble,
   .skills-card-signal-wave,
   .security-card-scan,
   .contact-scene-status__dot,

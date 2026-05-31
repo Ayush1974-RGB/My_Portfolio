@@ -181,15 +181,22 @@ src/
 
 ## Deployment
 
-This project is ready to deploy on Vercel or any static hosting platform that supports Vite builds.
+This project is configured for Netlify.
 
-Standard build output:
+Netlify settings:
+
+- Build command: `npm run build`
+- Publish directory: `dist`
+- Node version: `22`
+- Site URL environment variable: `VITE_SITE_URL=https://your-netlify-site.netlify.app`
+
+Local production build:
 
 ```bash
 npm run build
 ```
 
-Then deploy the generated `dist/` folder.
+Then deploy the generated `dist/` folder, or connect the repository to Netlify and let Netlify build it automatically.
 
 ## Notes
 

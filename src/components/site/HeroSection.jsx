@@ -1,8 +1,8 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { motion as Motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import AnimatedCounter from './AnimatedCounter';
-import Magnetic from './Magnetic';
 import { createStaggerContainer, createStaggerItem, MOTION_EASE } from './motion';
+import { createEmailComposeUrl } from '../../utils/contactLinks';
 
 const heroIntroContainer = createStaggerContainer(0.09, 0.06);
 const heroLeadItem = createStaggerItem(28, 0.62);
@@ -57,12 +57,12 @@ function setLineText(node, value) {
   }
 }
 
-function HeroSection({ profile, hero, keyHighlights, onOpenResume, enableEnhancedEffects = true }) {
+function HeroSection({ profile, hero, keyHighlights, onOpenResume, onNavigate, enableEnhancedEffects = true }) {
   const sectionRef = useRef(null);
   const lineRefs = useRef([]);
   const reduceMotion = useReducedMotion();
   const [enableScrollEffects, setEnableScrollEffects] = useState(false);
-  const visibleBadges = useMemo(() => hero.badges.slice(0, 3), [hero.badges]);
+  const visibleBadges = useMemo(() => hero.badges, [hero.badges]);
   const visibleCallouts = useMemo(() => hero.callouts.slice(0, 3), [hero.callouts]);
   const heroMetrics = useMemo(() => keyHighlights?.items?.slice(0, 3) ?? [], [keyHighlights]);
   const showFloatingMetrics = heroMetrics.length >= 2;
@@ -262,59 +262,70 @@ function HeroSection({ profile, hero, keyHighlights, onOpenResume, enableEnhance
                       </p>
                     </div>
 
-                    <div className="flex w-full flex-col gap-3.5 xl:w-auto xl:items-end">
+                    <div className="relative z-30 flex w-full flex-col gap-3.5 xl:w-auto xl:items-end">
                       <div className="flex flex-col gap-3 min-[500px]:flex-row min-[500px]:flex-wrap xl:justify-end">
-                        <Magnetic proximity proximityRadius={132} proximityStrength={13}>
-                          <Motion.a
-                            href={`mailto:${profile.email}`}
-                            whileHover={{ scale: 1.008, y: -1 }}
-                            whileTap={{ scale: 0.96 }}
-                            transition={{ duration: 0.18 }}
-                            className="button-primary hero-primary-cta w-full min-[500px]:w-auto"
-                            data-cursor-wrap="true"
-                            data-cursor-padding="10"
-                            data-cursor-proximity="122"
-                          >
-                            Email Me <span aria-hidden="true">/</span>
-                          </Motion.a>
-                        </Magnetic>
-                        <Magnetic strength={8} proximity proximityRadius={128} proximityStrength={12}>
-                          <Motion.button
-                            type="button"
-                            onClick={onOpenResume}
-                            whileHover={{ scale: 1.006, y: -1 }}
-                            whileTap={{ scale: 0.96 }}
-                            transition={{ duration: 0.18 }}
-                            className="button-secondary w-full min-[500px]:w-auto"
-                            data-cursor-wrap="true"
-                            data-cursor-padding="10"
-                            data-cursor-proximity="118"
-                          >
-                            View Resume <span aria-hidden="true">/</span>
-                          </Motion.button>
-                        </Magnetic>
-                        <Magnetic strength={7} proximity proximityRadius={128} proximityStrength={11}>
-                          <Motion.a
-                            href="#projects"
-                            whileHover={{ scale: 1.006, y: -1 }}
-                            whileTap={{ scale: 0.96 }}
-                            transition={{ duration: 0.18 }}
-                            className="button-secondary w-full min-[500px]:w-auto"
-                            data-cursor-wrap="true"
-                            data-cursor-padding="10"
-                            data-cursor-proximity="118"
-                          >
-                            View Work <span aria-hidden="true">/</span>
-                          </Motion.a>
-                        </Magnetic>
+                        <Motion.a
+                          href={createEmailComposeUrl(profile.email)}
+                          target="_blank"
+                          rel="noreferrer"
+                          whileHover={{ scale: 1.008, y: -1 }}
+                          whileTap={{ scale: 0.96 }}
+                          transition={{ duration: 0.18 }}
+                          className="button-primary hero-primary-cta relative z-30 w-full min-[500px]:w-auto"
+                          data-cursor-wrap="true"
+                          data-cursor-padding="10"
+                          data-cursor-proximity="122"
+                        >
+                          Email Me <span aria-hidden="true">/</span>
+                        </Motion.a>
+                        <Motion.button
+                          type="button"
+                          onClick={onOpenResume}
+                          whileHover={{ scale: 1.006, y: -1 }}
+                          whileTap={{ scale: 0.96 }}
+                          transition={{ duration: 0.18 }}
+                          className="button-secondary relative z-30 w-full min-[500px]:w-auto"
+                          data-cursor-wrap="true"
+                          data-cursor-padding="10"
+                          data-cursor-proximity="118"
+                        >
+                          View Resume <span aria-hidden="true">/</span>
+                        </Motion.button>
+                        <Motion.a
+                          href="#projects"
+                          onClick={(event) => {
+                            event.preventDefault();
+                            onNavigate?.('projects');
+                          }}
+                          whileHover={{ scale: 1.006, y: -1 }}
+                          whileTap={{ scale: 0.96 }}
+                          transition={{ duration: 0.18 }}
+                          className="button-secondary relative z-30 w-full min-[500px]:w-auto"
+                          data-cursor-wrap="true"
+                          data-cursor-padding="10"
+                          data-cursor-proximity="118"
+                        >
+                          View Projects <span aria-hidden="true">/</span>
+                        </Motion.a>
                       </div>
 
                       {visibleBadges.length ? (
-                        <div className="flex flex-wrap gap-2.5 sm:gap-3 xl:justify-end">
-                          {visibleBadges.map((badge) => (
-                            <span key={badge} className="hero-chip hero-chip--muted">
+                        <div className="hero-tech-cloud" aria-label="Technology stack">
+                          {visibleBadges.map((badge, index) => (
+                            <Motion.span
+                              key={badge}
+                              className="hero-chip hero-chip--muted hero-tech-bubble"
+                              style={{
+                                '--bubble-index': index,
+                                '--bubble-x': `${(index % 5) * 18}%`,
+                                '--bubble-y': `${Math.floor(index / 5) * 42}%`,
+                                '--bubble-drift': `${index % 2 === 0 ? 1 : -1}`,
+                                '--bubble-duration': `${5.2 + (index % 4) * 0.45}s`,
+                                '--bubble-delay': `${index * -0.34}s`,
+                              }}
+                            >
                               {badge}
-                            </span>
+                            </Motion.span>
                           ))}
                         </div>
                       ) : null}
@@ -379,7 +390,7 @@ function HeroSection({ profile, hero, keyHighlights, onOpenResume, enableEnhance
                 <div className="absolute left-5 top-5 flex items-center gap-2 sm:left-7 sm:top-7">
                   <span className="h-2.5 w-2.5 rounded-full bg-accent shadow-[0_0_18px_var(--theme-accent)]" />
                   <span className="text-[0.66rem] font-semibold uppercase tracking-[0.28em] text-foreground-muted">
-                    Secure systems profile
+                    AI-ML + full stack
                   </span>
                 </div>
 
@@ -418,7 +429,7 @@ function HeroSection({ profile, hero, keyHighlights, onOpenResume, enableEnhance
                     <div className="bento-card rounded-[1.35rem] border border-border bg-background/72 p-4 backdrop-blur sm:rounded-[1.5rem] sm:p-5">
                       <span className="eyebrow">Current Snapshot</span>
                       <p className="mt-4 max-w-[15ch] text-[1.65rem] font-bold leading-[1] tracking-[-0.045em] text-foreground sm:mt-5 sm:text-[2.2rem]">
-                        Building secure digital products with frontend precision and systems awareness.
+                        Building intelligent full-stack applications with machine learning, APIs, databases, and usable interfaces.
                       </p>
                     </div>
 

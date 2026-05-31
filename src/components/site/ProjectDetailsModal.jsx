@@ -7,6 +7,7 @@ import { MOTION_EASE } from './motion';
 const CASE_STUDY_SECTIONS = [
   { key: 'problem', label: 'Problem' },
   { key: 'solution', label: 'Solution' },
+  { key: 'implementation', label: 'Implementation' },
   { key: 'impact', label: 'Impact' },
 ];
 
@@ -222,16 +223,26 @@ function ProjectDetailsPanel({
           </div>
 
           <div className="grid gap-3 sm:gap-4">
-            {CASE_STUDY_SECTIONS.map((section) => (
-              <div key={section.key} className="project-detail-panel rounded-[1rem] sm:rounded-[1.35rem] p-4 sm:p-5 md:p-6">
-                <span className="text-[0.62rem] sm:text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-foreground-muted">
-                  {section.label}
-                </span>
-                <p className="mt-3 sm:mt-4 text-[0.85rem] sm:text-[0.98rem] md:text-base leading-6 sm:leading-7 text-foreground">
-                  {project.caseStudy?.[section.key] ?? project.caseStudy?.approach}
-                </p>
-              </div>
-            ))}
+            {CASE_STUDY_SECTIONS.map((section) => {
+              const content =
+                project.caseStudy?.[section.key] ??
+                (section.key === 'implementation' ? project.detail : undefined);
+
+              if (!content) {
+                return null;
+              }
+
+              return (
+                <div key={section.key} className="project-detail-panel rounded-[1rem] sm:rounded-[1.35rem] p-4 sm:p-5 md:p-6">
+                  <span className="text-[0.62rem] sm:text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-foreground-muted">
+                    {section.label}
+                  </span>
+                  <p className="mt-3 sm:mt-4 text-[0.85rem] sm:text-[0.98rem] md:text-base leading-6 sm:leading-7 text-foreground">
+                    {content}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -286,7 +297,6 @@ export default function ProjectDetailsModal({ project, onClose, tone = 'vector' 
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
-    const previousTouchAction = document.body.style.touchAction;
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         onClose?.();
@@ -294,22 +304,13 @@ export default function ProjectDetailsModal({ project, onClose, tone = 'vector' 
     };
 
     document.body.style.overflow = 'hidden';
-    document.body.style.touchAction = 'none';
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.body.style.touchAction = previousTouchAction;
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [onClose]);
-
-  const handleDragEnd = (event, info) => {
-    // Swipe down to close on mobile
-    if (info.offset.y > 60 && info.velocity.y > 100) {
-      onClose?.();
-    }
-  };
 
   if (!project) {
     return null;
@@ -328,15 +329,11 @@ export default function ProjectDetailsModal({ project, onClose, tone = 'vector' 
         ref={modalRef}
         variants={panelVariants}
         transition={reduceMotion ? { duration: 0 } : undefined}
-        drag="y"
-        dragElastic={{ top: 0.2, bottom: 0 }}
-        dragConstraints={{ top: 0, bottom: 300 }}
-        onDragEnd={handleDragEnd}
         onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="project-case-study-title"
-        className="relative flex h-[min(95dvh,90vh,54rem)] w-full max-w-6xl flex-col overflow-hidden rounded-[1.2rem] sm:rounded-[1.6rem] md:rounded-[2rem] border border-border/80 bg-background/78 p-2 sm:p-3 md:p-4 shadow-[var(--theme-shadow-lg)] backdrop-blur-xl cursor-grab active:cursor-grabbing"
+        className="relative flex h-[min(95dvh,90vh,54rem)] w-full max-w-6xl flex-col overflow-hidden rounded-[1.2rem] sm:rounded-[1.6rem] md:rounded-[2rem] border border-border/80 bg-background/78 p-2 sm:p-3 md:p-4 shadow-[var(--theme-shadow-lg)] backdrop-blur-xl"
       >
         <button
           type="button"

@@ -75,7 +75,7 @@ function ProjectAtlasCard({ projects, liveProjects }) {
               Total Projects
             </p>
             <p className="mt-3 text-3xl font-bold tracking-[-0.06em] text-foreground">
-              {projects.items.length.toString().padStart(2, '0')}
+              {projects.items.length.toString().padStart(2, '1')}
             </p>
           </div>
 
@@ -84,7 +84,7 @@ function ProjectAtlasCard({ projects, liveProjects }) {
               Live Demos
             </p>
             <p className="mt-3 text-3xl font-bold tracking-[-0.06em] text-accent">
-              {liveProjects.toString().padStart(2, '0')}
+              {liveProjects.toString().padStart(2, '1')}
             </p>
           </div>
         </div>

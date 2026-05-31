@@ -8,7 +8,6 @@ import HeroSection from './components/site/HeroSection';
 import SitePreloader from './components/site/SitePreloader';
 import SignalTape from './components/site/SignalTape';
 import KeyHighlightsSection from './components/site/KeyHighlightsSection';
-import StatementSection from './components/site/StatementSection';
 import AboutSection from './components/site/AboutSection';
 import SkillsSection from './components/site/SkillsSection';
 import SecurityMindsetSection from './components/site/SecurityMindsetSection';
@@ -119,8 +118,8 @@ export default function App() {
     portfolioData.profile.secondaryRole,
     ...portfolioData.hero.badges,
     portfolioData.about.facts[1]?.value,
-    'NITK CSE',
-    'Portfolio engineered for recruiter clarity',
+    'JIIT CSE',
+    'AI-ML portfolio engineered for recruiter clarity',
   ].filter(Boolean);
   const navigateToPage = useCallback(
     (id) => {
@@ -227,11 +226,11 @@ export default function App() {
           hero={portfolioData.hero}
           keyHighlights={portfolioData.keyHighlights}
           onOpenResume={openResume}
+          onNavigate={navigateToPage}
           enableEnhancedEffects={false}
         />
         <SignalTape items={tapeItems} />
         <KeyHighlightsSection keyHighlights={portfolioData.keyHighlights} />
-        <StatementSection statement={portfolioData.statement} />
         <Suspense fallback={<LazySectionFallback id="contact" className="section-space pb-24 sm:pb-28" />}>
           <ContactSection
             contact={portfolioData.contact}
@@ -274,7 +273,7 @@ export default function App() {
       default:
         return homePage;
     }
-  }, [activePageId, allowHeavyVisuals, openResume, tapeItems]);
+  }, [activePageId, allowHeavyVisuals, navigateToPage, openResume, tapeItems]);
 
   return (
     <MotionConfig

@@ -1,6 +1,7 @@
 import { motion as Motion } from 'framer-motion';
 import { useEffect, useMemo } from 'react';
 import { MOTION_EASE } from './motion';
+import { createEmailComposeUrl } from '../../utils/contactLinks';
 
 const overlayVariants = {
   hidden: {
@@ -175,18 +176,18 @@ export default function ResumeModal({
     [experience.timeline]
   );
 
-  const developmentSkills = useMemo(
-    () => skills.categories.find((category) => category.eyebrow === 'Development')?.items ?? [],
+  const languageSkills = useMemo(
+    () => skills.categories.find((category) => category.eyebrow === 'Languages')?.items ?? [],
     [skills.categories]
   );
 
-  const securitySkills = useMemo(
-    () => skills.categories.find((category) => category.eyebrow === 'Cybersecurity')?.items ?? [],
+  const aiSkills = useMemo(
+    () => skills.categories.find((category) => category.eyebrow === 'AI & Data')?.items ?? [],
     [skills.categories]
   );
 
-  const toolSkills = useMemo(
-    () => skills.categories.find((category) => category.eyebrow === 'Tools & Technologies')?.items ?? [],
+  const webSkills = useMemo(
+    () => skills.categories.find((category) => category.eyebrow === 'Web Stack')?.items ?? [],
     [skills.categories]
   );
 
@@ -198,7 +199,7 @@ export default function ResumeModal({
       {
         label: 'Email',
         value: profile.email,
-        href: `mailto:${profile.email}`,
+        href: createEmailComposeUrl(profile.email),
       },
       {
         label: 'Phone',
@@ -229,8 +230,8 @@ export default function ResumeModal({
       [
         { label: 'Based in', value: profile.location },
         { label: 'Availability', value: hero.badges[0] ?? 'Open to internships' },
-        { label: 'Education', value: educationItem?.org ?? 'NITK' },
-        { label: 'Focus', value: 'Frontend + Security' },
+        { label: 'Education', value: educationItem?.org ?? 'JIIT Noida' },
+        { label: 'Focus', value: 'AI + Machine Learning' },
       ],
     [educationItem?.org, hero.badges, profile.location]
   );
@@ -355,12 +356,17 @@ export default function ResumeModal({
             <div className="mt-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="flex max-w-[46rem] flex-wrap items-center gap-x-2.5 gap-y-3 pb-1 lg:pb-0">
                 <SkillTag>{profile.location}</SkillTag>
-                <SkillTag>{educationItem?.org ?? 'NITK'}</SkillTag>
-                <SkillTag accent>Security-Aware Development</SkillTag>
+                <SkillTag>{educationItem?.org ?? 'JIIT Noida'}</SkillTag>
+                <SkillTag accent>AI-ML Development</SkillTag>
               </div>
 
               <div className="flex flex-col gap-2.5 min-[480px]:flex-row lg:self-end">
-                <a href={`mailto:${profile.email}`} className="button-primary w-full min-[480px]:w-auto">
+                <a
+                  href={createEmailComposeUrl(profile.email)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="button-primary w-full min-[480px]:w-auto"
+                >
                   Contact Me <span aria-hidden="true">/</span>
                 </a>
                 <a href={profile.resumeUrl} target="_blank" rel="noreferrer" className="button-secondary w-full min-[480px]:w-auto">
@@ -498,14 +504,14 @@ export default function ResumeModal({
               </div>
 
               <div className="space-y-3 sm:space-y-4">
-                <ResumeSection label="Technical Stack" title="Development + security foundations">
+                <ResumeSection label="Technical Stack" title="AI, data, and web foundations">
                   <div className="space-y-4">
                     <div>
                       <p className="text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-foreground-muted sm:text-[0.72rem] sm:tracking-[0.22em]">
-                        Development
+                        Languages
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2.5">
-                        {developmentSkills.map((item) => (
+                        {languageSkills.map((item) => (
                           <SkillTag key={item}>{item}</SkillTag>
                         ))}
                       </div>
@@ -513,10 +519,10 @@ export default function ResumeModal({
 
                     <div>
                       <p className="text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-foreground-muted sm:text-[0.72rem] sm:tracking-[0.22em]">
-                        Cybersecurity
+                        AI & Data
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2.5">
-                        {securitySkills.map((item) => (
+                        {aiSkills.map((item) => (
                           <SkillTag key={item} accent>
                             {item}
                           </SkillTag>
@@ -526,10 +532,10 @@ export default function ResumeModal({
 
                     <div>
                       <p className="text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-foreground-muted sm:text-[0.72rem] sm:tracking-[0.22em]">
-                        Tools
+                        Web Stack
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2.5">
-                        {toolSkills.map((item) => (
+                        {webSkills.map((item) => (
                           <SkillTag key={item}>{item}</SkillTag>
                         ))}
                       </div>
@@ -537,7 +543,7 @@ export default function ResumeModal({
                   </div>
                 </ResumeSection>
 
-                <ResumeSection label="Security Focus" title="Security-aware engineering mindset">
+                <ResumeSection label="AI Focus" title="Machine learning and product-minded AI">
                   <div className="grid gap-3 min-[520px]:grid-cols-2">
                     {securityFocus.items.slice(0, 4).map((item) => (
                       <article key={item.title} className="rounded-[1.2rem] border border-border bg-background/76 px-4 py-4">

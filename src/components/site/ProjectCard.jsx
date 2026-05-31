@@ -139,7 +139,7 @@ function ProjectCard({
           ) : null}
 
           <div className={`flex flex-wrap ${compact ? 'mt-3.5 gap-2' : 'mt-5 gap-2.5'}`}>
-            {project.stack.slice(0, 3).map((item) => (
+            {project.stack.slice(0, 5).map((item) => (
               <span
                 key={item}
                 className={`rounded-full border border-slate-200/80 bg-slate-950/[0.03] font-semibold uppercase tracking-[0.14em] text-slate-600 ${
