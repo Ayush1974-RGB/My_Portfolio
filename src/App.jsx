@@ -98,7 +98,7 @@ export default function App() {
   const [enhancementsReady, setEnhancementsReady] = useState(false);
   const clientCapabilities = getClientCapabilities();
   const allowCustomCursor = clientCapabilities.canUseHeavyEnhancements;
-  const allowHeavyVisuals = clientCapabilities.canUseHeavyEnhancements;
+  const allowHeavyVisuals = clientCapabilities.canRunEnhancements;
   const pageIds = useMemo(
     () => portfolioData.navigation.map(({ id }) => id),
     []

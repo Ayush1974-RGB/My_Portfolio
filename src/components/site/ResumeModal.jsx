@@ -1,5 +1,5 @@
 import { motion as Motion } from 'framer-motion';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { MOTION_EASE } from './motion';
 import { createEmailComposeUrl } from '../../utils/contactLinks';
 
@@ -165,6 +165,7 @@ export default function ResumeModal({
   experience,
   onClose,
 }) {
+  const panelRef = useRef(null);
   const educationItem = useMemo(
     () => experience.timeline.find((item) => item.type === 'Education'),
     [experience.timeline]
@@ -237,19 +238,81 @@ export default function ResumeModal({
   );
 
   useEffect(() => {
+    const scrollY = window.scrollY;
+    const previousHtmlOverscrollBehavior = document.documentElement.style.overscrollBehavior;
     const previousOverflow = document.body.style.overflow;
+    const previousPosition = document.body.style.position;
+    const previousTop = document.body.style.top;
+    const previousLeft = document.body.style.left;
+    const previousRight = document.body.style.right;
+    const previousWidth = document.body.style.width;
+    let touchStartY = 0;
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         onClose();
       }
     };
+    const handleTouchStart = (event) => {
+      touchStartY = event.touches[0]?.clientY ?? 0;
+    };
+    const handleTouchMove = (event) => {
+      const panel = panelRef.current;
+      const target = event.target;
 
+      if (!panel || !(target instanceof Element) || !panel.contains(target)) {
+        event.preventDefault();
+        return;
+      }
+
+      const nearestScrollable = target.closest('.resume-modal-scroll');
+      const primaryScrollable = panel.querySelector('.resume-modal-primary-scroll');
+      const scrollable =
+        nearestScrollable && nearestScrollable.scrollHeight > nearestScrollable.clientHeight + 1
+          ? nearestScrollable
+          : primaryScrollable;
+
+      if (!scrollable) {
+        event.preventDefault();
+        return;
+      }
+
+      const currentY = event.touches[0]?.clientY ?? touchStartY;
+      const deltaY = currentY - touchStartY;
+      const canScrollUp = scrollable.scrollTop > 0;
+      const canScrollDown = scrollable.scrollTop + scrollable.clientHeight < scrollable.scrollHeight - 1;
+
+      if ((deltaY > 0 && !canScrollUp) || (deltaY < 0 && !canScrollDown)) {
+        event.preventDefault();
+        return;
+      }
+
+      event.stopPropagation();
+      touchStartY = currentY;
+    };
+
+    document.documentElement.style.overscrollBehavior = 'none';
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
     window.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
+      document.documentElement.style.overscrollBehavior = previousHtmlOverscrollBehavior;
       document.body.style.overflow = previousOverflow;
+      document.body.style.position = previousPosition;
+      document.body.style.top = previousTop;
+      document.body.style.left = previousLeft;
+      document.body.style.right = previousRight;
+      document.body.style.width = previousWidth;
       window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchmove', handleTouchMove);
+      window.scrollTo(0, scrollY);
     };
   }, [onClose]);
 
@@ -264,11 +327,12 @@ export default function ResumeModal({
     >
       <Motion.div
         variants={panelVariants}
+        ref={panelRef}
         onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="resume-modal-title"
-        className="resume-modal-panel surface-panel-strong relative flex max-h-[calc(100dvh-1rem)] w-full max-w-6xl flex-col overflow-y-auto rounded-[1.45rem] p-3 sm:max-h-[calc(100dvh-2rem)] sm:rounded-[1.9rem] sm:p-5 md:h-[min(90dvh,58rem)] md:max-h-[90dvh] md:overflow-hidden md:rounded-[2.1rem] md:p-6 lg:p-7"
+        className="resume-modal-panel surface-panel-strong relative flex h-[calc(100dvh-1rem)] w-full max-w-6xl flex-col overflow-hidden rounded-[1.45rem] p-3 sm:h-[calc(100dvh-2rem)] sm:rounded-[1.9rem] sm:p-5 md:h-[min(90dvh,58rem)] md:max-h-[90dvh] md:rounded-[2.1rem] md:p-6 lg:p-7"
       >
         <button
           type="button"
@@ -279,7 +343,13 @@ export default function ResumeModal({
           &times;
         </button>
 
-        <Motion.div variants={contentVariants} initial="hidden" animate="show" exit="exit" className="flex flex-col md:h-full md:min-h-0">
+        <Motion.div
+          variants={contentVariants}
+          initial="hidden"
+          animate="show"
+          exit="exit"
+          className="resume-modal-primary-scroll resume-modal-scroll flex h-full min-h-0 flex-col overflow-y-auto md:overflow-hidden"
+        >
           <Motion.div variants={itemVariants} className="border-b border-border/80 pb-5 pr-10 sm:pb-6 sm:pr-12 md:pb-7 md:pr-14">
             <div className="grid gap-4 xl:grid-cols-[1.16fr_0.84fr] xl:items-start">
               <div className="min-w-0">
