@@ -259,7 +259,7 @@ export default function ResumeModal({
       initial="hidden"
       animate="show"
       exit="exit"
-      className="fixed inset-0 z-[95] flex items-center justify-center bg-background/64 px-2 py-2 sm:px-4 sm:py-4 lg:px-5 lg:py-5"
+      className="resume-modal-overlay fixed inset-0 z-[95] flex items-start justify-center overflow-y-auto bg-background/64 px-2 py-2 sm:px-4 sm:py-4 md:items-center lg:px-5 lg:py-5"
       onClick={onClose}
     >
       <Motion.div
@@ -268,7 +268,7 @@ export default function ResumeModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="resume-modal-title"
-        className="surface-panel-strong relative flex h-[93vh] max-h-[93vh] w-full max-w-6xl flex-col overflow-hidden rounded-[1.45rem] p-3 sm:h-[91vh] sm:max-h-[91vh] sm:rounded-[1.9rem] sm:p-5 md:h-[min(90vh,58rem)] md:max-h-[90vh] md:rounded-[2.1rem] md:p-6 lg:p-7"
+        className="resume-modal-panel surface-panel-strong relative flex max-h-[calc(100dvh-1rem)] w-full max-w-6xl flex-col overflow-y-auto rounded-[1.45rem] p-3 sm:max-h-[calc(100dvh-2rem)] sm:rounded-[1.9rem] sm:p-5 md:h-[min(90dvh,58rem)] md:max-h-[90dvh] md:overflow-hidden md:rounded-[2.1rem] md:p-6 lg:p-7"
       >
         <button
           type="button"
@@ -279,7 +279,7 @@ export default function ResumeModal({
           &times;
         </button>
 
-        <Motion.div variants={contentVariants} initial="hidden" animate="show" exit="exit" className="flex h-full min-h-0 flex-col">
+        <Motion.div variants={contentVariants} initial="hidden" animate="show" exit="exit" className="flex flex-col md:h-full md:min-h-0">
           <Motion.div variants={itemVariants} className="border-b border-border/80 pb-5 pr-10 sm:pb-6 sm:pr-12 md:pb-7 md:pr-14">
             <div className="grid gap-4 xl:grid-cols-[1.16fr_0.84fr] xl:items-start">
               <div className="min-w-0">
@@ -376,7 +376,7 @@ export default function ResumeModal({
             </div>
           </Motion.div>
 
-          <Motion.div variants={itemVariants} className="mt-3 min-h-0 flex-1 overflow-y-auto pr-0.5 sm:mt-4 sm:pr-1 overscroll-contain">
+          <Motion.div variants={itemVariants} className="resume-modal-scroll mt-3 pr-0.5 sm:mt-4 sm:pr-1 md:min-h-0 md:flex-1 md:overflow-y-auto overscroll-contain">
             <div className="grid gap-3 sm:gap-4 lg:grid-cols-[1.04fr_0.96fr]">
               <div className="space-y-3 sm:space-y-4">
                 <ResumeSection label="Strengths" title="What I bring to a team">

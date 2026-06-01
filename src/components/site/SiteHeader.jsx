@@ -287,7 +287,7 @@ export default function SiteHeader({
                   ? { duration: 0 }
                   : { duration: 0.22, ease: [0.22, 1, 0.36, 1] }
               }
-              className="fixed inset-0 z-[60] flex items-center justify-center bg-[color:color-mix(in_srgb,var(--theme-accent)_22%,rgba(7,16,48,0.18))] px-4 py-6 backdrop-blur-[18px] sm:px-6"
+              className="site-menu-overlay fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-[color:color-mix(in_srgb,var(--theme-accent)_22%,rgba(7,16,48,0.18))] px-4 py-6 backdrop-blur-[18px] sm:px-6"
               onClick={() => {
                 setHoveredId(null);
                 setMenuOpen(false);
@@ -310,7 +310,7 @@ export default function SiteHeader({
                     ? { duration: 0 }
                     : { duration: 0.28, ease: [0.22, 1, 0.36, 1] }
                 }
-                className="nav-glass w-full max-w-[42rem] max-h-[min(82svh,44rem)] overflow-y-auto rounded-[1.8rem] p-3 shadow-[var(--theme-shadow-lg)] sm:rounded-[2.2rem] sm:p-4 lg:p-5"
+                className="site-menu-panel nav-glass w-full max-w-[42rem] max-h-[min(82dvh,44rem)] overflow-y-auto rounded-[1.8rem] p-3 shadow-[var(--theme-shadow-lg)] sm:rounded-[2.2rem] sm:p-4 lg:p-5"
                 id="site-navigation-panel"
                 onClick={(event) => event.stopPropagation()}
               >

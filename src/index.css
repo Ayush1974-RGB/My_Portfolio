@@ -1527,6 +1527,21 @@ html[data-theme='dark'] {
     -webkit-overflow-scrolling: touch;
   }
 
+  .resume-modal-overlay,
+  .resume-modal-panel,
+  .resume-modal-scroll {
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .site-menu-overlay,
+  .site-menu-panel {
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .project-modal-watermark {
     position: absolute;
     right: clamp(1.25rem, 3vw, 2.25rem);
